@@ -1,0 +1,22 @@
+// export const apiUrl = state => { return state.apiUrl }
+export const loginStatus = state => { return state.loginStatus }
+export const language = state => { return state.language }
+export const ip = state => { return state.ip }
+export const authToken = state => { return state.authToken }
+export const userInfo = state => { return state.userInfo }
+export const site = state => { return state.site }
+export const userName = state => { return state.userName }
+export const forgetTrigger = state => { return state.forgetTrigger }
+export const showModal = state => { return state.showModal }
+export const userVerify = state => { return state.userVerify }
+export const showErrorModal = state => { return state.showErrorModal }
+export const businessNumber = state => { return state.businessNumber }
+export const AID = state => { return state.AID }
+export const sessionID = state => { return state.sessionID }
+export const lotterID = state => { return state.lotterID }
+export const playTypeID = state => { return state.playTypeID }
+export const totalBetList = state => { return state.totalBetList }
+export const hall = state => { return state.hall }
+export const returnURL = state => { return state.returnURL }
+export const logoutCountDown = state => { return state.logoutCountDown }
+export const pceggAlert = state => { return state.pceggAlert }

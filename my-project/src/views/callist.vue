@@ -3,27 +3,38 @@
     <div v-if="step === 1">
       <div class="header header-color">
         <h2>功能選取</h2>
-        <div class="backtolist" @click="goBack()">取消</div>
       </div>
       <div class="list">
         <ul>
           <li @click="changeSelect(0)"><router-link :to="{ path: '/calculator'}"><div><img class="icon" src="@/assets/images/member/icon1.svg"><span>計算機</span></div></router-link></li>
-          <li @click="changeSelect(1)"><img class="icon" src="@/assets/images/member/icon2.svg"><span>匯率換算</span><img v-if="false" src="@/assets/images/payway/icon002.png"></li>
-          <li @click="changeSelect(2)"><img class="icon" src="@/assets/images/member/icon3.svg"><span>長度換算</span><img v-if="false" src="@/assets/images/payway/icon002.png"></li>
-          <li @click="changeSelect(3)"><img class="icon" src="@/assets/images/member/icon4.svg"><span>面積換算</span><img v-if="false" src="@/assets/images/payway/icon002.png"></li>
-          <li @click="changeSelect(4)"><img class="icon" src="@/assets/images/member/icon5.svg"><span>速度換算</span><img v-if="false" src="@/assets/images/payway/icon002.png"></li>
-          <li @click="changeSelect(5)"><img class="icon" src="@/assets/images/member/icon6.svg"><span>重量換算</span><img v-if="false" src="@/assets/images/payway/icon002.png"></li>
-          <li @click="changeSelect(6)"><img class="icon" src="@/assets/images/member/icon7.svg"><span>溫度換算</span><img v-if="false" src="@/assets/images/payway/icon002.png"></li>
-          <li @click="changeSelect(7)"><img class="icon" src="@/assets/images/member/icon8.png"><span>功率換算</span><img v-if="false" src="@/assets/images/payway/icon002.png"></li>
-          <li @click="changeSelect(8)"><img class="icon" src="@/assets/images/member/icon1.svg"><span>壓強換算</span><img v-if="false" src="@/assets/images/payway/icon002.png"></li>
+          <li @click="changeSelect(10)"><img class="icon" src="@/assets/images/member/icon2.svg"><span>換算</span><img v-if="false" src="@/assets/images/payway/icon002.png"></li>
           <li @click="changeSelect(9)"><router-link :to="{ path: '/todo'}"><div><img class="icon" src="@/assets/images/member/icon2.svg"><span>todo</span></div></router-link></li>
         </ul>
       </div>
     </div>
-    <div class="countType" v-if="step === 2">
+    <div v-if="step === 2">
+      <div class="header header-color">
+        <h2>換算選取</h2>
+        <div class="backtolist" @click="goback()">取消</div>
+      </div>
+      <div class="list">
+        <ul>
+          <li @click="funcSelect(1)"><img class="icon" src="@/assets/images/member/icon2.svg"><span>匯率換算</span><img v-if="false" src="@/assets/images/payway/icon002.png"></li>
+          <li @click="funcSelect(2)"><img class="icon" src="@/assets/images/member/icon3.svg"><span>長度換算</span><img v-if="false" src="@/assets/images/payway/icon002.png"></li>
+          <li @click="funcSelect(3)"><img class="icon" src="@/assets/images/member/icon4.svg"><span>面積換算</span><img v-if="false" src="@/assets/images/payway/icon002.png"></li>
+          <li @click="funcSelect(4)"><img class="icon" src="@/assets/images/member/icon5.svg"><span>速度換算</span><img v-if="false" src="@/assets/images/payway/icon002.png"></li>
+          <li @click="funcSelect(5)"><img class="icon" src="@/assets/images/member/icon6.svg"><span>重量換算</span><img v-if="false" src="@/assets/images/payway/icon002.png"></li>
+          <li @click="funcSelect(6)"><img class="icon" src="@/assets/images/member/icon7.svg"><span>溫度換算</span><img v-if="false" src="@/assets/images/payway/icon002.png"></li>
+          <li @click="funcSelect(7)"><img class="icon" src="@/assets/images/member/icon8.png"><span>功率換算</span><img v-if="false" src="@/assets/images/payway/icon002.png"></li>
+          <li @click="funcSelect(8)"><img class="icon" src="@/assets/images/member/icon1.svg"><span>壓強換算</span><img v-if="false" src="@/assets/images/payway/icon002.png"></li>
+
+        </ul>
+      </div>
+    </div>
+    <div class="countType" v-if="step === 3">
       <div class="header header-color">
         <h2>{{functionName}}</h2>
-        <div class="backtolist" @click="gostep1()">取消</div>
+        <div class="backtolist" @click="goback()">取消</div>
       </div>
       <div class="topbox">
         <rate v-if="select === 1" ref="ra"></rate>
@@ -85,7 +96,7 @@ export default {
       step: 1,
       select: 99,
       functionName: '',
-      funtionNameList: ['計算機', '匯率轉換', '長度換算', '面積換算', '速度換算', '重量換算', '溫度換算', '功率換算', '壓強換算'],
+      funtionNameList: ['計算機', '匯率轉換', '長度換算', '面積換算', '速度換算', '重量換算', '溫度換算', '功率換算', '壓強換算', 'todo'],
     }
   },
   components: {
@@ -99,33 +110,23 @@ export default {
     press
   },
   mounted () {
-
   },
   methods: {
-    goBack () {
-      this.$router.push({ path: '/member/list' })
+    goback () {
+      this.step--
     },
-    gostep1 () {
-      this.step = 1
-    },
-    // addselect (val) {
-    //   $('.select').remove()
-
-    //   var a = $('.list ul').children()[val]
-    //   a.append('<li></li>')// <ul class="select"><li style="width: 8vw; transform: translate(68%,-2.6vw) rotate(136deg);"></li><li style="transform: translate(82%,-2.6vw) rotate(45deg); width: 4vw;"></li></ul>
-    //   $('.select').css({'position': 'absolute', 'right': '11vw'})
-    //   $('.select ul li').css({'background-color': 'rgb(255, 153, 0)', 'height': '1vw'})
-    // },
     changeSelect (val) {
-      if (val !== 0) {
-        this.select = val
-        this.functionName = this.funtionNameList[val]
+      if (val === 10) {
         this.step = 2
       } else {
         this.select = val
       }
     },
-
+    funcSelect (val) {
+      this.functionName = this.funtionNameList[val]
+      this.select = val
+      this.step = 3
+    },
     clickNum (val) {
       if (this.$refs.ra !== undefined) { this.$refs.ra.clickNumber(val) }
       if (this.$refs.le !== undefined) { this.$refs.le.clickNumber(val) }
@@ -185,16 +186,10 @@ export default {
   top: 4vw;
   color: rgb(255, 153, 0)
 }
-.list {
-  background-color: black;
-  color: white;
-  height: 100%;
-  top: -5vw;
-  position: relative;
-}
+
 .list ul li {
   position: relative;
-  padding: 7vw 0 0 7vw;
+  padding: 6vw 0 0 7vw;
   border-top: 0.3vw solid rgb(17, 17, 17);
   height: 14vw;
 }

@@ -1,14 +1,21 @@
 <template>
   <div id="app">
-
     <router-view/>
   </div>
 </template>
 
 <script>
-
+import { mapGetters, mapActions } from 'vuex'
 export default {
-  name: 'App'
+  name: 'App',
+
+
+  methods: {
+    ...mapActions(['setLogoutCountDown'])
+  },
+  destroyed () {
+    window.clearInterval(this.logoutTimer)
+  }
 }
 </script>
 

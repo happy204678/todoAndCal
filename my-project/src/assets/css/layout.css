@@ -50,3 +50,17 @@ div {
   background-position: center;
   background-size: auto 40%;
   font-size: 0; }
+
+  .header div.backtolist {
+    position: absolute;
+    right: 3vw;
+    top: 4vw;
+    color: rgb(255, 153, 0)
+  }
+  .list {
+    background-color: black;
+    color: white;
+    height: auto;
+    top: -5vw;
+    position: relative;
+  }

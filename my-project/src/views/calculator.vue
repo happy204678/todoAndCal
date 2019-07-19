@@ -327,12 +327,7 @@ export default {
   background-color: rgb(19, 19, 19);
   position: relative;
 }
-.header div.backtolist {
-  position: absolute;
-  right: 3vw;
-  top: 4vw;
-  color: rgb(255, 153, 0)
-}
+
 .content {
   position: relative;
   height: 100%;
