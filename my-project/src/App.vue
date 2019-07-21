@@ -25,7 +25,8 @@ export default {
 
 #app {
   background-color: rgb(19, 19, 19);
-      position: relative;
-    top: -4vw;
+  position: relative;
+  top: -4vw;
+  /* height: 100% */
 }
 </style>

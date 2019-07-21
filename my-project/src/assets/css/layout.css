@@ -64,3 +64,15 @@ div {
     top: -5vw;
     position: relative;
   }
+  body {
+    background-image: url('../images/whokills/2.png');
+    background-color: #fff;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    background-size: cover;
+  }
+  .whokills {
+    position: relative;
+  }
+

@@ -9,6 +9,7 @@
           <li @click="changeSelect(0)"><router-link :to="{ path: '/calculator'}"><div><img class="icon" src="@/assets/images/member/icon1.svg"><span>計算機</span></div></router-link></li>
           <li @click="changeSelect(10)"><img class="icon" src="@/assets/images/member/icon2.svg"><span>換算</span><img v-if="false" src="@/assets/images/payway/icon002.png"></li>
           <li @click="changeSelect(9)"><router-link :to="{ path: '/todo'}"><div><img class="icon" src="@/assets/images/member/icon2.svg"><span>todo</span></div></router-link></li>
+          <li @click="changeSelect(11)"><router-link :to="{ path: '/whokills'}"><div><img class="icon" src="@/assets/images/member/icon2.svg"><span>狼人殺</span></div></router-link></li>
         </ul>
       </div>
     </div>
