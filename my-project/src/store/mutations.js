@@ -2,6 +2,7 @@ import * as types from './mutation-types'
 import store from 'storejs' // store save as localStorage
 // state
 const state = {
+  // number: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''], // player's num
   ip: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''], // store.get('ip'),
   identify: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''], // store.get('userInfo') !== undefined ? store.get('userInfo') : null,
   userName: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', ''], // store.get('userName') !== undefined ? store.get('userName') : null
@@ -19,7 +20,13 @@ const mutations = {
     state.ip = payload
   },
   [types.SET_USERNAME] (state, payload) {
-    state.userName[state.] = payload || undefined
+    state.userName = payload || undefined
+  },
+  [types.SET_PLAYGAME] (state, payload) {
+    state.playGame = payload
+  },
+  [types.SET_NUMBER] (state, payload) {
+    state.number = payload
   }
 }
 export {

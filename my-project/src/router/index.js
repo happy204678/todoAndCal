@@ -5,6 +5,7 @@ const callist = () => import('@/views/callist')
 const calculator = () => import('@/views/calculator')
 const todo = () => import('@/views/todo')
 const whokills = () => import('@/views/whokills')
+const login = () => import('@/views/login')
 
 Vue.use(Router)
 
@@ -31,6 +32,12 @@ export default new Router({
       path: '/whokills',
       name: 'whokills',
       component: whokills,
+      meta: { requireAuth: true }
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: login,
       meta: { requireAuth: true }
     }
   ]

@@ -47,8 +47,8 @@ export default {
 
 
 <style scoped>
-  body {
+  /* body {
     background-image: url('../assets/images/whokills/2.png');
     background-color: #fff;
-  }
+  } */
 </style>
