@@ -1,5 +1,5 @@
 html, body {
-  height: 100%;
+  /* height: 100%; */
 }
 
 body {
@@ -64,9 +64,7 @@ div {
     top: -5vw;
     position: relative;
   }
-  .whokills {
-    position: relative;
-  }
+
   .loginBody {
     text-align: center;
   }
@@ -92,7 +90,8 @@ div {
   .login {
     background-color: #fff;
     position: relative;
-    width: fit-content;
+    width: 280px;
+    height: 165px;
     padding: 2vw;
     margin:0 auto;
     border-radius: 2vw;
@@ -100,18 +99,42 @@ div {
     z-index: 5;
   }
   .login span {
-    font-size: 5vw;
+    font-size: 34px;
     font-weight: 700;
   }
   .login input {
-    margin: 3vw 2vw 3vw 2vw;
-    font-size: 4vw;
+    position: relative;
+    margin: 20px auto;
+    font-size: 21px;
     overflow: hidden;
   }
   .login button {
-    font-size: 4vw;
-    height: 7vw;
+    font-size: 29px;
+    height: 47px;
     width: 100%;
-    margin: 1vw;
+
   }
 
+  .whokills {
+    position: relative;
+    height: -webkit-fill-available;
+    /* background-image: url('../images/whokills/2.png'); */
+    padding: 20px;
+  }
+  .whokills .topdiv {
+    position: relative;
+  }
+.whokills .topdiv h1 {
+  font: 700;
+  font-size: 100px;
+  margin: 0;
+}
+.whokills .topdiv div {
+  position: absolute;
+  right:0px;
+  top: 30px;
+  width: 200px;
+  height: 200px;
+  margin: 0 15px 0 0;
+  background-color: rgb(255, 247, 230)
+}

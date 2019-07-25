@@ -1,7 +1,7 @@
 <template>
   <div class="whokills">
     <div class="topdiv">
-      <span>狼人殺</span>
+      <h1>狼人殺</h1>
       <div class="joinMemberList">
         <ul>
           <li>123</li>
@@ -47,8 +47,5 @@ export default {
 
 
 <style scoped>
-  /* body {
-    background-image: url('../assets/images/whokills/2.png');
-    background-color: #fff;
-  } */
+
 </style>
