@@ -3,24 +3,39 @@
     <div class="topdiv">
       <h1>狼人殺</h1>
       <div class="joinMemberList">
+        <h3>觀戰人員列表</h3>
         <ul>
           <li>123</li>
+          <li>123</li>
+          <li>123</li>
+          <li>123</li>
+          <li>123</li>
+          <li>123</li>
+          <li>123</li>
+          <li>123</li>
+          <li>123</li><li>123</li><li>123</li>
         </ul>
       </div>
+      <button @click="goMemberList()">觀戰</button>
     </div>
-    <div class="memberSeat">
-      <ul>
-        <li @click="sit(0)"></li>
-        <li @click="sit(1)"></li>
-        <li @click="sit(2)"></li>
-        <li @click="sit(3)"></li>
-        <li @click="sit(4)"></li>
-        <li @click="sit(5)"></li>
-        <li @click="sit(6)"></li>
-        <li @click="sit(7)"></li>
-        <li @click="sit(8)"></li>
-        <li @click="sit(9)"></li>
-      </ul>
+    <div class="row1">
+      <div class="memberSeat">3</div>
+      <div class="memberSeat">4</div>
+      <div class="memberSeat">5</div>
+      <div class="memberSeat">6</div>
+      <div class="memberSeat">7</div>
+      <div class="memberSeat">8</div>
+    </div>
+    <div class="row2">
+      <div class="memberSeat ">2</div>
+      <div class="memberSeat floatright">9</div>
+    </div>
+    <div class="row3">
+      <div class="memberSeat">1</div>
+      <div class="memberSeat floatright">10</div>
+    </div>
+    <div class="startgame">
+      <button>開始遊戲</button>
     </div>
     <!-- <div class="chatArea">
     </div> -->
@@ -35,6 +50,9 @@ export default {
   },
   methods: {
     sit (number) {
+
+    },
+    goMemberList () {
 
     }
   }

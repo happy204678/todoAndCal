@@ -21,7 +21,7 @@ export default {
   data () {
     return {
       name: '',
-      permissionList: ['陳宥丞', '123', null, null, null, null, null, null, null, null, null], // 人名登入
+      permissionList: ['陳宥丞', '123', '葉佳霖', null, null, null, null, null, null, null, null], // 人名登入
       permissionKey: false,
     }
   },
