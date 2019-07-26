@@ -138,10 +138,6 @@ div {
     overflow: overlay;
     border-radius:10px;
   }
-  .whokills .startgame {
-    position: absolute;
-    width: 100%
-  }
   ::-webkit-scrollbar {
     width:5px;
   }
@@ -179,17 +175,29 @@ div {
     position: relative;
     width: 100%;
     height: 110px;
-    margin: 9.6px auto 0 auto;
+    margin: 4.18vw auto 0 auto;
     float: left
   }
   .memberSeat {
     height: 100%;
     position: relative;
     width: 15.666%;
-    margin: 0 0 0 9.6px;
+    margin: 0 0 0 10.4px;
     background-color:white;
     float: left;
     border-radius: 10px
+  }
+  .row1 :last-child {
+    margin-right: 0vw;
+  }
+  .mid {
+    margin: 0px 24vw;
+    width: 15vw;
+    height: 6vw;
+    color: white;
+    background-color: rgb(189, 0, 0);
+    font-size: 25px;
+    font-weight: bold;
   }
   .floatright {
     float: right;

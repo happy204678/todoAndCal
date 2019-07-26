@@ -24,7 +24,7 @@
       <div class="memberSeat">5</div>
       <div class="memberSeat">6</div>
       <div class="memberSeat">7</div>
-      <div class="memberSeat">8</div>
+      <div class="memberSeat floatright">8</div>
     </div>
     <div class="row2">
       <div class="memberSeat ">2</div>
@@ -32,10 +32,8 @@
     </div>
     <div class="row3">
       <div class="memberSeat">1</div>
+      <button class="mid"><span>開始遊戲</span></button>
       <div class="memberSeat floatright">10</div>
-    </div>
-    <div class="startgame">
-      <button>開始遊戲</button>
     </div>
     <!-- <div class="chatArea">
     </div> -->
