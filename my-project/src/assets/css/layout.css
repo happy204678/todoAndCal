@@ -112,6 +112,7 @@ div {
     width: 100%;
   }
   .whokills {
+    display: none;
     position: relative;
     height: -webkit-fill-available;
     /* background-image: url('../images/whokills/2.png'); */
