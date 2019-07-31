@@ -21,13 +21,13 @@ export default {
   data () {
     return {
       name: '',
-      permissionList: ['陳宥丞', '123', '葉佳霖','1', '2', '3', '4'], // 人名登入
+      permissionList: ['陳宥丞', '123', '葉佳霖','1', '2', '3', '4', '5', '6', '7'], // 人名登入
       permissionKey: false,
       playerNumber: 0, // record login number
     }
   },
   computed: {
-    ...mapGetters(['userName', 'ip', 'identify', 'playGame', 'number']),
+    ...mapGetters(['userName', 'ip', 'identify', 'playGame', 'number', 'online']),
   },
   mounted () {
     console.log('userName', (typeof this.userName), this.userName)
@@ -41,10 +41,9 @@ export default {
     window.setTimeout(function () {
       $('.login').fadeIn(2000)
     }, 900)
-
   },
   methods: {
-    ...mapActions(['setIp', 'setUserName', 'setPlayGame','setNumber', 'setOnlineAdd']),
+    ...mapActions(['setIp', 'setUserName', 'setPlayGame','setNumber']),
     doLogin () {
       var vm = this
       //permission
@@ -65,7 +64,7 @@ export default {
         }
         vm.sendbus(vm.playerNumber)
         vm.setNumber(vm.playerNumber)
-        vm.setUserName(vm.name)
+        vm.setUserName(String(vm.name))
 
         vm.goWhoKills()
       // failure

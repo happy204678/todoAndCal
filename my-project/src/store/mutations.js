@@ -5,7 +5,7 @@ const state = {
   number: store.get('number') !== undefined ? store.get('number') : [], // player's num
   ip: [], // store.get('ip'),
   identify: [], // store.get('userInfo') !== undefined ? store.get('userInfo') : null,
-  userName: store.get('userName'), //  !== undefined ? store.get('userName') : [],
+  userName: store.get('userName') !== undefined ? store.get('userName') : [],
   playGame: [], // true/false
   online: 0
 }
@@ -21,15 +21,19 @@ const mutations = {
     state.ip.push(payload)
   },
   [types.SET_USERNAME] (state, payload) {
-    store.set(state.userName, state.userName.push(payload))
+    console.log(state.userName)
+    state.userName.push(payload)
     state.online = state.userName.length
+    // store.remove('userName') // 刪State
+    // state.userName = []
   },
   [types.SET_PLAYGAME] (state, payload) {
     console.log(payload)
     state.playGame.push(payload)
   },
   [types.SET_NUMBER] (state, payload) {
-    store.set('number', state.number.push(payload))
+    state.number.push(payload)
+    // store.set('number', state.number.push(payload))
   },
   [types.SET_LOGOUT] (state, payload) {
     state.userName.splice(payload, 1)

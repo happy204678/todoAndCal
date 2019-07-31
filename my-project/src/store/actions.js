@@ -3,7 +3,10 @@ import * as types from './mutation-types'
 import store from 'storejs'
 
 export const setUserName = ({ commit }, value) => {
-  // store.set('userName', value)
+  let array = store.get('userName') !== undefined ? store.get('userName') : []
+  console.log(array)
+  array.push(value)
+  store.set('userName', array)
   commit(types.SET_USERNAME, value)
 }
 export const setIdentify = ({ commit }, value) => {
@@ -16,11 +19,19 @@ export const setPlayGame = ({ commit }, value) => {
   commit(types.SET_PLAYGAME, value)
 }
 export const setNumber = ({ commit }, value) => {
-  store.set('number', value)
+  let array = store.get('number') !== undefined ? store.get('number') : []
+  array.push(value)
+  store.set('number', array)
   commit(types.SET_NUMBER, value)
 }
 export const setLogout = ({ commit }, value) => {
-  store.set('logout', value)
+  let us = store.get('userName')
+  us.splice(value)
+  store.set('userName', us)
+
+  let n = store.get('number')
+  n.splice(value)
+  store.set('number', n)
   commit(types.SET_LOGOUT, value)
 }
 

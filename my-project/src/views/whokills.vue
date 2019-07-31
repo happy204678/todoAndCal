@@ -61,6 +61,7 @@ export default {
       vm.memberList = vm.userName
       console.log(vm.userName)
       console.log('online : ' + vm.online)
+      console.log('number', this.playerNumber)
     }, 1000)
 
   },
@@ -75,6 +76,7 @@ export default {
     destroyed () {
       this.setLogout(this.playerNumber)
       console.log('online : ' + this.online)
+      this.$router.go(-1)
     }
   }
 }
