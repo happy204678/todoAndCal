@@ -5,8 +5,9 @@
       <div class="joinMemberList">
         <h3>觀戰人員列表</h3>
         <ul v-if="memberList.length > 0">
-          <li v-for="(member, index) in memberList" :key="index">{{member}}</li>
+          <li v-for="(member, index) in memberList" :key="index" :class="{red: member === loginName}">{{member}}</li>
         </ul>
+        <span>{{memberList.length}}人</span>
       </div>
       <button @click="goMemberList()">觀戰</button>
     </div>
@@ -32,52 +33,82 @@
   </div>
 </template>
 <script>
+
 import { mapActions, mapGetters } from 'vuex'
-import { setTimeout } from 'timers';
 import $ from 'jquery'
+import store from 'storejs'
+import * as types from '../store/mutation-types'
 export default {
   data () {
     return {
-      playerNumber: 0,
+      loginName: '',
       memberList: [],
+      timer: ''
       // onLine: navigator.onLine,
     }
   },
   computed: {
-    ...mapGetters(['userName', 'ip', 'identify', 'playGame', 'number', 'online']),
+    ...mapGetters(['userName', 'ip', 'identify', 'playGame']),
   },
+  watch: {
 
+  },
   mounted () {
     var vm = this
 
     $('.whokills').fadeIn(2000)
 
-    vm.bus.$off('playerNumber')
-    vm.bus.$on('playerNumber', function (val) {
-      vm.playerNumber = val
-    })
-
-    setInterval(function() {
-      vm.memberList = vm.userName
-      console.log(vm.userName)
-      console.log('online : ' + vm.online)
-      console.log('number', this.playerNumber)
+    // vm.bus.$on('playerNumber', function (val) {
+    //   console.log('emit', val)
+    //   vm.playerNumber = val
+    // })
+    if (this.$route.params.id) {
+      vm.loginName = vm.$route.params.id
+    } else {
+      this.$router.push({ path: '/login' })
+    }
+    this.timer = setInterval(function() {
+        vm.getdata()
     }, 1000)
 
+    window.onbeforeunload = function (e) {
+      vm.closePage()
+    }
   },
   methods: {
-    ...mapActions(['setIp', 'setUserName', 'setPlayGame','setNumber', 'setLogout']),
+    ...mapActions(['setIp', 'setUserName', 'setPlayGame', 'setLogout', 'getData']),
     sit (number) {
 
     },
     goMemberList () {
 
     },
-    destroyed () {
-      this.setLogout(this.playerNumber)
+    getdata (data) {
+      var vm = this
+      this.getData().then((res) => {
+        vm.memberList = res.userName
+        vm.online = res.userName.length
+      })
+
+      console.log('username', this.memberList)
       console.log('online : ' + this.online)
-      this.$router.go(-1)
+    },
+    closePage () {
+      let num = this.memberList.indexOf(this.loginName)
+      if (num >= 0) {
+        this.setLogout(num)
+      }
+
+      this.$router.push({ path: '/login' })
+
+      window.clearInterval(this.timer)
     }
+  },
+  beforeDestroy () {
+    this.closePage()
+  },
+  destroyed () {
+
   }
 }
 </script>

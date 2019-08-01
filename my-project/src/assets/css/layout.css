@@ -136,8 +136,15 @@ div {
     font-size: 18px;
   }
   .whokills .joinMemberList {
+    position: relative;
     overflow: overlay;
     border-radius:10px;
+  }
+  .whokills .joinMemberList span{
+    position: fixed;
+    right: 5vw;
+    bottom: 63vw;
+    z-index: 10;
   }
   ::-webkit-scrollbar {
     width:5px;
@@ -202,6 +209,10 @@ div {
   }
   .floatright {
     float: right;
+  }
+  .red {
+    color: #ff0000;
+    font-weight: bolder;
   }
 
 @media screen and (max-width: 600px){

@@ -29,7 +29,7 @@ export default new Router({
       meta: { requireAuth: true }
     },
     {
-      path: '/whokills',
+      path: '/whokills/:id',
       name: 'whokills',
       component: whokills,
       meta: { requireAuth: true }

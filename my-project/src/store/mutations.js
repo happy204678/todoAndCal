@@ -31,13 +31,11 @@ const mutations = {
     console.log(payload)
     state.playGame.push(payload)
   },
-  [types.SET_NUMBER] (state, payload) {
-    state.number.push(payload)
-    // store.set('number', state.number.push(payload))
-  },
   [types.SET_LOGOUT] (state, payload) {
+    console.log('paload', payload)
     state.userName.splice(payload, 1)
-    state.number.splice(payload, 1)
+  },
+  [types.GET_DATA] (state) {
   }
 }
 export {

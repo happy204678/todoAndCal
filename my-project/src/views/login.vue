@@ -21,16 +21,15 @@ export default {
   data () {
     return {
       name: '',
-      permissionList: ['陳宥丞', '123', '葉佳霖','1', '2', '3', '4', '5', '6', '7'], // 人名登入
-      permissionKey: false,
-      playerNumber: 0, // record login number
+      permissionList: ['陳宥丞', '123', '葉佳霖','1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13' ], // 人名登入
+      permissionKey: false
     }
   },
   computed: {
-    ...mapGetters(['userName', 'ip', 'identify', 'playGame', 'number', 'online']),
+    ...mapGetters(['userName', 'ip', 'identify', 'playGame', 'online']),
   },
   mounted () {
-    console.log('userName', (typeof this.userName), this.userName)
+
     $('.title').fadeIn(0, function () {
       $('.title').animate({fontSize: '15vw'}, 100, function () {
         $('.title').animate({fontSize: '10vw'}, 500, function () {
@@ -40,10 +39,12 @@ export default {
     })
     window.setTimeout(function () {
       $('.login').fadeIn(2000)
+
     }, 900)
+    console.log('userName', (typeof this.userName), this.userName)
   },
   methods: {
-    ...mapActions(['setIp', 'setUserName', 'setPlayGame','setNumber']),
+    ...mapActions(['setIp', 'setUserName', 'setPlayGame']),
     doLogin () {
       var vm = this
       //permission
@@ -59,33 +60,23 @@ export default {
 
         // store ip name number
         // console.log(returnCitySN["cip"], returnCitySN["cname"]) // 118.163.88.174 台湾省
-        if (vm.userName !== undefined) {
-          vm.playerNumber = vm.userName.length
-        }
-        vm.sendbus(vm.playerNumber)
-        vm.setNumber(vm.playerNumber)
-        vm.setUserName(String(vm.name))
 
+        vm.setUserName(vm.name)
         vm.goWhoKills()
       // failure
       } else {
         this.loginFail()
-        return
       }
-
     },
     loginFail () {
       this.name = ''
       window.alert('字有錯 || 他媽給我亂打 || 你沒有權限QQ || 您已經登入惹')
     },
-    sendbus (val) {
-      this.bus.$emit('playerNumber', val)
-    },
     goWhoKills () {
       var vm = this
       window.setTimeout(function () {
         $('.loginBody').fadeOut(2000, function () {
-          vm.$router.push({ path: '/whokills' })
+          vm.$router.push({ path: '/whokills/' + vm.name })
         })
       }, 500)
     }
