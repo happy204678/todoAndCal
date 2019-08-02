@@ -89,15 +89,13 @@ import temp from '@/components/calculator/temperature'
 import power from '@/components/calculator/power'
 import press from '@/components/calculator/press'
 
-import $ from 'jquery'
-
 export default {
   data () {
     return {
       step: 1,
       select: 99,
       functionName: '',
-      funtionNameList: ['計算機', '匯率轉換', '長度換算', '面積換算', '速度換算', '重量換算', '溫度換算', '功率換算', '壓強換算', 'todo'],
+      funtionNameList: ['計算機', '匯率轉換', '長度換算', '面積換算', '速度換算', '重量換算', '溫度換算', '功率換算', '壓強換算', 'todo']
     }
   },
   components: {
@@ -121,7 +119,6 @@ export default {
         this.step = 2
       } else {
         // this.select = val
-        return
       }
     },
     funcSelect (val) {
@@ -172,7 +169,6 @@ export default {
   }
 }
 </script>
-
 
 <style scoped>
 .header {

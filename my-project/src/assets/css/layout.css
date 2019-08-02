@@ -186,6 +186,9 @@ div {
     margin: 4.18vw auto 0 auto;
     float: left
   }
+  .row1 .active, .row2 .active, .row3 .active {
+    background-color: #ff0000
+  }
   .memberSeat {
     height: 100%;
     position: relative;

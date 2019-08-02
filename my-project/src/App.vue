@@ -5,17 +5,12 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+
 export default {
-  name: 'App',
-
-
-  methods: {
-    ...mapActions(['setLogoutCountDown'])
-  },
-  destroyed () {
-    window.clearInterval(this.logoutTimer)
-  }
+  name: 'App'
+  // destroyed () {
+  //   window.clearInterval(this.logoutTimer)
+  // }
 }
 </script>
 

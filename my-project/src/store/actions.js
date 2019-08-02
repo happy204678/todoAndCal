@@ -4,18 +4,25 @@ import store from 'storejs'
 
 export const setUserName = ({ commit }, value) => {
   let array = store.get('userName') !== undefined ? store.get('userName') : []
-  console.log(array)
   array.push(value)
   store.set('userName', array)
   commit(types.SET_USERNAME, value)
+
+  let array2 = store.get('playGame') !== undefined ? store.get('playGame') : [] // set not ready
+  array2.push(false)
+  store.set('playGame', array2)
+  commit(types.SET_PLAYGAME, false)
 }
-export const setIdentify = ({ commit }, value) => {
-  commit(types.SET_IDENTIFY, value)
-}
-export const setIp = ({ commit }, value) => {
-  commit(types.SET_IP, value)
-}
+// export const setIdentify = ({ commit }, value) => {
+//   commit(types.SET_IDENTIFY, value)
+// }
+// export const setIp = ({ commit }, value) => {
+//   commit(types.SET_IP, value)
+// }
 export const setPlayGame = ({ commit }, value) => {
+  let array = store.get('playGame')
+  array.splice(value, 1, !array[value])
+  store.set('playGame', array)
   commit(types.SET_PLAYGAME, value)
 }
 export const setLogout = ({ commit }, value) => {
@@ -23,14 +30,23 @@ export const setLogout = ({ commit }, value) => {
   us.splice(value, 1)
   store.set('userName', us)
 
+  let pl = store.get('playGame')
+  pl.splice(value, 1)
+  store.set('playGame', pl)
   commit(types.SET_LOGOUT, value)
 }
+export const setSeat = ({ commit }, value) => {
+  let se = store.get('seat') !== undefined ? store.get('seat') : [false, false, false, false, false, false, false, false, false, false]
+  se.splice(value, 1, !se[value])
+  store.set('seat', se)
+  commit(types.SET_SEAT, value)
+}
 export const getData = ({ commit }) => {
-  // console.log('instore', store.get('userName'))
-
   commit(types.GET_DATA)
   let data = {
-    userName: store.get('userName')
+    userName: store.get('userName'),
+    playGame: store.get('playGame'),
+    seat: store.get('seat') !== undefined ? store.get('seat') : [false, false, false, false, false, false, false, false, false, false]
   }
   return data
 }

@@ -77,14 +77,14 @@ export default {
   watch: {
     num1 () {
       let countlength = this.neg1.length + this.num1 + this.operator + this.neg2 + this.num2
-      if(countlength.length >= 9) {
+      if (countlength.length >= 9) {
         $('span.result').addClass('over')
       } else {
         $('span.result').removeClass('over')
       }
     },
     record () {
-      if(this.record.length >= 9) {
+      if (this.record.length >= 9) {
         $('span.record').addClass('overrecord')
       } else {
         $('span.record').removeClass('overrecord')
@@ -96,12 +96,11 @@ export default {
     $(document).ready(function () {
       $('.slide').click(function () {
         $('.numberbox').slideUp() // css('display','none')
-        $('.slide').css('display','none')
-
+        $('.slide').css('display', 'none')
       })
       $('.action ul li').click(function () {
         $('.numberbox').slideDown() // css('display','block')
-        $('.slide').css('display','block')
+        $('.slide').css('display', 'block')
         if (this.className === 'clearlog') {
           vm.logarr = []
         }
@@ -141,7 +140,7 @@ export default {
     },
     number (val) {
       var vm = this
-       if (vm.operator === '') { // press number
+      if (vm.operator === '') { // press number
         if (vm.num1 === '0' || vm.num1.indexOf('=') === 0) { // after Clear
           vm.record = ''
           vm.num1 = val
@@ -226,7 +225,7 @@ export default {
       var vm = this
       vm.num1 = vm.num1.toString()
       if (vm.num1.length === 0 || vm.num2.length === 0 || vm.num1.indexOf('=') === 0) {
-        //do nothing
+        // do nothing
       } else {
         if (Number(vm.num1) < 0) {
           vm.num = vm.num.substring(1, vm.num.length)
@@ -301,7 +300,6 @@ export default {
           vm.neg1 = ''
         } else {
           vm.neg1 = '-'
-
         }
       } else {
         if (vm.neg2.length > 0) {

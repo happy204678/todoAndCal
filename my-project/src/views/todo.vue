@@ -54,8 +54,7 @@ export default {
       } else {
         $('.listplace').css('display', 'none')
       }
-    },
-
+    }
   },
   mounted () {
     this.getCookie()
@@ -86,7 +85,6 @@ export default {
           vm.savespan = ''
           this.modifyclicked = false
           $('.modify').removeAttr('style')
-
         } else {
           vm.notmod()
         }
@@ -158,7 +156,7 @@ export default {
 
       this.deleteTodo()
 
-      for(let i = 0; i < tmp.length; i++){ // append to donelist
+      for (let i = 0; i < tmp.length; i++) { // append to donelist
         $('.donelist ul').append('<li style="margin: 2vw 0 2vw 0"><input type="checkbox" checked disabled><span style="width: 39vw;position: absolute;overflow: hidden;height: 5vw;">' + tmp[i] + '</span><li>')
       }
       this.displaytodolist()
@@ -183,12 +181,12 @@ export default {
     },
     getCookie () {
       if (document.cookie.length > 0) {
-        var arr = document.cookie.split('; ') // 这里显示的格式需要切割一下自己可输出看下
+        let arr = document.cookie.split('; ') // 这里显示的格式需要切割一下自己可输出看下
         for (var i = 0; i < arr.length; i++) {
-          var arr2 = arr[i].split('=') // 再次切割
+          let arr2 = arr[i].split('=') // 再次切割
           // 判断查找相对应的值
           if (arr2[0] === 'todo') {
-            var arr3 = arr2[1].split(',') // 再次切割
+            let arr3 = arr2[1].split(',') // 再次切割
             for (let j = 0; j < arr3.length; j++) {
               if (arr3[j] !== '') {
                 console.log(document.cookie)
@@ -196,7 +194,7 @@ export default {
               }
             }
           } else if (arr2[0] === 'done') {
-            var arr3 = arr2[1].split(',') // 再次切割
+            let arr3 = arr2[1].split(',') // 再次切割
             for (let j = 0; j < arr3.length; j++) {
               if (arr3[j] !== '') {
                 $('.donelist ul').append('<li class="li" style="margin: 2vw 0 2vw 0"><input type="checkbox" class="check" disabled checked><span style="width: 40vw;position: absolute;overflow: hidden;height: 5vw;">' + arr3[j] + '</span></li>')
@@ -210,7 +208,7 @@ export default {
     delcoockie (name) {
       var exp = new Date()
       exp.setTime(exp.getTime() - 1)
-      document.cookie= name + "=;expires="+exp.toGMTString()
+      document.cookie = name + '=;expires=' + exp.toGMTString()
     },
     reset () {
       this.todocookie = []
@@ -221,14 +219,15 @@ export default {
       for (let i = 0; i < todolength; i++) {
         span = $('.todolist ul li span').eq(i).html()
         this.todocookie.push(span)
-      }for (let i = 0; i < donelength; i++) {
+      }
+      for (let i = 0; i < donelength; i++) {
         span = $('.donelist ul li span').eq(i).html()
         this.donecookie.push(span)
       }
     },
     goBack () {
       this.$router.push({ path: '/' })
-    },
+    }
   }
 }
 </script>

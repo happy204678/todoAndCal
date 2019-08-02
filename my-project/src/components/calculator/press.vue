@@ -65,7 +65,6 @@ export default {
         this.turnbtm(this.topnum)
       } else {
         if (this.btmnum === '0') {
-
           this.btmnum = val
         } else {
           this.btmnum += val
@@ -105,7 +104,7 @@ export default {
     },
     goBack (val) {
       this.$router.push({ path: '/member/callist' })
-    },
+    }
   }
 }
 </script>
