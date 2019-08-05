@@ -25,7 +25,7 @@
     </div>
     <div class="row3" v-if="sitseat.length > 0">
       <div class="memberSeat" @click="sit(0)" :class="{'active': sitseat[0] === true}">1</div>
-      <button class="mid"><span>開始遊戲</span></button>
+      <button class="mid" @click="startGame()"><span>開始遊戲</span></button>
       <div class="memberSeat floatright" @click="sit(9)" :class="{'active': sitseat[9] === true}">10</div>
     </div>
     <!-- <div class="chatArea">
@@ -45,10 +45,10 @@ export default {
       playGame: [],
       sitseat: [],
       sitnumber: 99,
-      timer1: '',
-      timer2: '',
+      timer: '',
       ready: false,
-      playerNumber: 99
+      playerNumber: 99,
+      startKey: false
     }
   },
   computed: {
@@ -70,12 +70,15 @@ export default {
       vm.getdata()
     }, 300)
 
-    window.onunload = function (e) { // close page
-      vm.closePage()
+    if (this.startKey === false) {
+      window.onunload = function (e) { // close page
+        vm.closePage()
+      }
+      window.onload = (e) => { // 重整
+        vm.closePage()
+      }
     }
-    window.onload = (e) => { // 重整
-      vm.closePage()
-    }
+
   },
   methods: {
     ...mapActions(['setIp', 'setUserName', 'setPlayGame', 'setLogout', 'getData', 'setSeat']),
@@ -122,6 +125,19 @@ export default {
         console.log('online : ', this.online)
       })
     },
+    startGame () {
+      let key = true
+      if (this.sitseat === [true, true, true, true, true, true, true, true, true, true]) {
+        key = true
+      }
+      if (key === true) {
+        // 開始
+        this.startKey = true
+        this.$router.push({ path: '/game' })
+      } else {
+        window.alert('位子未滿')
+      }
+    },
     closePage () {
       let num = this.memberList.indexOf(this.loginName)
       if (num >= 0) {
@@ -135,7 +151,9 @@ export default {
     }
   },
   beforeDestroy () {
+    if (this.startKey === false) {
     this.closePage()
+    }
   },
   destroyed () {
 

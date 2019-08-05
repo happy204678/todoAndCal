@@ -6,6 +6,7 @@ const calculator = () => import('@/views/calculator')
 const todo = () => import('@/views/todo')
 const whokills = () => import('@/views/whokills')
 const login = () => import('@/views/login')
+const game = () => import('@/views/game')
 
 Vue.use(Router)
 
@@ -38,6 +39,12 @@ export default new Router({
       path: '/login',
       name: 'login',
       component: login,
+      meta: { requireAuth: true }
+    },
+    {
+      path: '/game',
+      name: 'game',
+      component: game,
       meta: { requireAuth: true }
     }
   ]
