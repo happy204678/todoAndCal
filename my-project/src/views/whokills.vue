@@ -5,9 +5,9 @@
       <div class="joinMemberList">
         <h3>人員列表</h3>
         <ul v-if="memberList.length > 0">
-          <li v-for="(member, index) in memberList" :key="index" :class="{'red': member === loginName}">{{member}}</li>
+          <li v-for="(member, index) in memberList" :key="index" :class="{'red': member === loginName}"><span>{{member}}</span><span v-if="playGame[memberList.indexOf(member)]"><-- 準備</span></li>
         </ul>
-        <span>{{memberList.length}}人</span>
+        <span class="countPoeple">{{memberList.length}}人</span>
       </div>
       <button @click="notready()">觀戰</button>
     </div>
@@ -45,14 +45,16 @@ export default {
       playGame: [],
       sitseat: [],
       sitnumber: 99,
-      timer: ''
+      timer1: '',
+      timer2: '',
+      ready: false,
+      playerNumber: 99
     }
   },
   computed: {
     ...mapGetters(['userName', 'ip', 'identify'])
   },
   watch: {
-
   },
   mounted () {
     var vm = this
@@ -66,9 +68,12 @@ export default {
     }
     this.timer = setInterval(function () {
       vm.getdata()
-    }, 1000)
+    }, 300)
 
-    window.onbeforeunload = function (e) { // close page
+    window.onunload = function (e) { // close page
+      vm.closePage()
+    }
+    window.onload = (e) => { // 重整
       vm.closePage()
     }
   },
@@ -78,10 +83,10 @@ export default {
       if (this.sitnumber === 99) { // 第一次入座
         // set state
         let num = this.memberList.indexOf(this.loginName)
+        this.playerNumber = num
         this.setPlayGame(num) // state
         this.sitnumber = number // store sit num
         this.setSeat(number) // active
-        console.log(111111)
       } else { // 已入座
         if (number === this.sitnumber) {
         } else if (this.sitseat[number] === true) {

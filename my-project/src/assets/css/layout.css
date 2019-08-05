@@ -140,10 +140,10 @@ div {
     overflow: overlay;
     border-radius:10px;
   }
-  .whokills .joinMemberList span{
+  .countPoeple{
     position: fixed;
-    right: 5vw;
-    bottom: 63vw;
+    right: 52px;
+    top: 230px;
     z-index: 10;
   }
   ::-webkit-scrollbar {

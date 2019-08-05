@@ -5,7 +5,9 @@ import App from './App'
 import store from './store'
 import i18n from './lang'
 import router from './router'
+// import fastclick from 'fastclick'
 
+// fastclick.attach(document.body)
 Vue.config.productionTip = false
 Vue.use(require('vue-moment'))
 
