@@ -1,7 +1,10 @@
 <template>
   <div class="game-bg">
     <div class="top">
-      <div class="identify"></div>
+      <div class="identify">
+        <div class="card-front"></div>
+        <div class="card-back"></div>
+      </div>
     </div>
     <div class="player">
       <ul>
@@ -42,6 +45,11 @@ export default {
       $('.player ul li:nth-child(1), .player ul li:nth-child(10)').animate({bottom: '5vw'}, 1000, 'swing')
     })
 
+    // $('.top .identify').click(function () {
+    //   // transform:rotateY(180deg)
+    //   $('.top .identify').css('transform', 'rotateY(180deg)')
+    // })
+
 
   }
 }
@@ -55,7 +63,8 @@ export default {
     width: 100%;
     background-image: url('../assets/images/background.jpg');
     background-repeat: no-repeat;
-    background-size: cover;
+    /* background-size: cover; */
+    background-size: 100% 100%;
   }
   .top {
     height: 20vw;
@@ -63,12 +72,41 @@ export default {
   }
   .top .identify {
     float: right;
-    background-color: rgb(255, 153, 0);
     border-radius: 1vw;
-    border: 5px solid rgb(102, 61, 0);
     width: 10vw;
     height: 16vw;
-    margin: 5vw;
+    margin: 10vw 10vw 0vw 0vw;
+    transform-style:preserve-3d;
+    transition:0.5s all ease;
+    box-shadow:0px 0px 10px rgba(10,10,0.8);
+
+  }
+  .top .identify:hover {
+  transform:rotateY(180deg);
+
+  }
+  .top .identify .card-front {
+    /* display: none; */
+    position:absolute;
+    /* background-image: url('../assets/images/whokills/people.jpg'); */
+    background-image: url('../assets/images/whokills/cardBack.jpg');
+    background-size: 100% 100%;
+    width: 100%;
+    height: 100%;
+    border-radius: 1vw;
+    backface-visibility:hidden;
+  }
+  .top .identify .card-back {
+    /* display: none; */
+    position:absolute;
+    /* background-image: url('../assets/images/whokills/cardBack.jpg'); */
+    background-image: url('../assets/images/whokills/people.jpg');
+    background-size: 100% 100%;
+    width: 100%;
+    height: 100%;
+    border-radius: 1vw;
+    backface-visibility:hidden;
+    transform:rotateY(180deg);
   }
   .player {
     width: 100%;
@@ -86,6 +124,7 @@ export default {
     background-image: linear-gradient(57deg,#030011,#010046 51%,#966100);
     /* transform:scale(1,1); */
     transition: all .3s cubic-bezier(0.39, 0.58, 0.57, 1);
+    box-shadow:0px 0px 10px rgba(10,10,0.8);
   }
   .player ul li:hover {
     transform:scale(1.1,1.1);
