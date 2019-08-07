@@ -13,9 +13,10 @@ export const setUserName = ({ commit }, value) => {
   store.set('playGame', array2)
   commit(types.SET_PLAYGAME, false)
 }
-// export const setIdentify = ({ commit }, value) => {
-//   commit(types.SET_IDENTIFY, value)
-// }
+export const setIdentify = ({ commit }, value) => {
+  store.set('identify', value)
+  commit(types.SET_IDENTIFY, value)
+}
 // export const setIp = ({ commit }, value) => {
 //   commit(types.SET_IP, value)
 // }
@@ -25,6 +26,17 @@ export const setPlayGame = ({ commit }, value) => {
   store.set('playGame', array)
   commit(types.SET_PLAYGAME, value)
 }
+export const setPlayer = ({ commit }, value) => {
+  let array = store.get('player') !== undefined ? store.get('player') : []
+  array.push(value)
+  store.set('player', array)
+  commit(types.SET_PLAYER, value)
+}
+// export const setModel = ({ commit }, value) => {
+//   let array = store.get(value)
+//   store.set(value, array)
+//   commit(types.SET_PLAYER, value)
+// }
 export const setLogout = ({ commit }, value) => {
   let us = store.get('userName')
   us.splice(value, 1)
@@ -46,12 +58,9 @@ export const getData = ({ commit }) => {
   let data = {
     userName: store.get('userName'),
     playGame: store.get('playGame'),
-    seat: store.get('seat') !== undefined ? store.get('seat') : [false, false, false, false, false, false, false, false, false, false]
+    seat: store.get('seat') !== undefined ? store.get('seat') : [false, false, false, false, false, false, false, false, false, false],
+    player: store.get('player') !== undefined ? store.get('player') : [],
+    identify: store.get('identify') !== undefined ? store.get('identify') : []
   }
   return data
 }
-
-// export const setUserVerify = ({ commit }, value) => {
-//   store.set('userVerify', value)
-//   commit(types.SET_USERVERIFY, value)
-// }

@@ -3,20 +3,22 @@ import store from 'storejs' // store save as localStorage
 // state
 const state = {
   ip: store.get('ip') !== undefined ? store.get('ip') : [], // store.get('ip'),
-  identify: [], // store.get('userInfo') !== undefined ? store.get('userInfo') : null,
+  identify: store.get('identify') !== undefined ? store.get('identify') : [],
   userName: store.get('userName') !== undefined ? store.get('userName') : [],
   playGame: store.get('playGame') !== undefined ? store.get('playGame') : [], // true/false
+  player: store.get('player') !== undefined ? store.get('player') : [],
   online: 0,
-  seat: store.get('seat') !== undefined ? store.get('seat') : [false, false, false, false, false, false, false, false, false, false]
+  seat: store.get('seat') !== undefined ? store.get('seat') : [false, false, false, false, false, false, false, false, false, false],
+  OGMode: [1, 1, 1, 1, 2, 3, 4, 5, 5, 5]
 }
 
 // mutations
 const mutations = {
   // action 發出 commit 會對應到 mutation 使用的是 Object key 方式
   // 在 mutation 改變 state（只有 mutation 可以改變！）
-  // [types.SET_IDENTIFY] (state, payload) {
-  //   state.identify.push(payload)
-  // },
+  [types.SET_IDENTIFY] (state, payload) {
+    state.identify = payload
+  },
   // [types.SET_IP] (state, payload) {
   //   state.ip.push(payload)
   // },
@@ -35,6 +37,9 @@ const mutations = {
     state.playGame.splice(payload, 1)
   },
   [types.SET_PLAYGAME] () {
+  },
+  [types.SET_PLAYER] () {
+
   },
   [types.SET_SEAT] (state, payload) {
     state.seat.splice(payload, 1, !state.seat[payload])

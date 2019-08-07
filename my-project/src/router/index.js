@@ -30,19 +30,19 @@ export default new Router({
       meta: { requireAuth: true }
     },
     {
-      path: '/whokills/:id',
-      name: 'whokills',
-      component: whokills,
-      meta: { requireAuth: true }
-    },
-    {
       path: '/login',
       name: 'login',
       component: login,
       meta: { requireAuth: true }
     },
     {
-      path: '/game',
+      path: '/whokills/:id',
+      name: 'whokills',
+      component: whokills,
+      meta: { requireAuth: true }
+    },
+    {
+      path: '/game/:id',
       name: 'game',
       component: game,
       meta: { requireAuth: true }

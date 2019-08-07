@@ -52,7 +52,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['userName', 'ip', 'identify'])
+     ...mapGetters(['OGMode'])
   },
   watch: {
   },
@@ -78,10 +78,9 @@ export default {
         vm.closePage()
       }
     }
-
   },
   methods: {
-    ...mapActions(['setIp', 'setUserName', 'setPlayGame', 'setLogout', 'getData', 'setSeat']),
+    ...mapActions(['setIp', 'setUserName', 'setPlayGame', 'setLogout', 'getData', 'setSeat', 'setPlayer', 'setIdentify']),
     sit (number) {
       if (this.sitnumber === 99) { // 第一次入座
         // set state
@@ -90,6 +89,7 @@ export default {
         this.setPlayGame(num) // state
         this.sitnumber = number // store sit num
         this.setSeat(number) // active
+        this.setPlayer(this.loginName)
       } else { // 已入座
         if (number === this.sitnumber) {
         } else if (this.sitseat[number] === true) {
@@ -127,16 +127,29 @@ export default {
     },
     startGame () {
       let key = true
-      if (this.sitseat === [true, true, true, true, true, true, true, true, true, true]) {
+      let vm = this
+      if (this.sitseat === [true, true, true, true, true, true, true, true, true, true]) { // check full seat
         key = true
       }
       if (key === true) {
         // 開始
         this.startKey = true
-        this.$router.push({ path: '/game' })
+        window.clearInterval(this.timer)
+
+        this.setMode(this.OGMode)
+
+        window.setTimeout(function () {
+          $('.whokills').fadeOut(2000, function () {
+            vm.$router.push({ path: '/game/' + vm.loginName })
+          })
+        }, 500)
       } else {
         window.alert('位子未滿')
       }
+    },
+    setMode (mode) { // set type of game. ex: OG
+      mode = mode.sort(() => { return Math.random() > 0.5 ? -1 : 1 })
+      this.setIdentify(mode)
     },
     closePage () {
       let num = this.memberList.indexOf(this.loginName)
@@ -152,7 +165,7 @@ export default {
   },
   beforeDestroy () {
     if (this.startKey === false) {
-    this.closePage()
+      this.closePage()
     }
   },
   destroyed () {
