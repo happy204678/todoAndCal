@@ -27,10 +27,20 @@ export const setPlayGame = ({ commit }, value) => {
   commit(types.SET_PLAYGAME, value)
 }
 export const setPlayer = ({ commit }, value) => {
-  let array = store.get('player') !== undefined ? store.get('player') : []
-  array.push(value)
-  store.set('player', array)
+  if (Array.isArray(value)) {
+    store.set('player', value)
+  } else {
+    let array = store.get('player') !== undefined ? store.get('player') : []
+    array.push(value)
+    store.set('player', array)
+  }
   commit(types.SET_PLAYER, value)
+}
+export const setPopPlayer = ({ commit }, value) => {
+  let array = store.get('player')
+  array.splice(value, 1)
+  store.set('player', array)
+  commit(types.SET_POPPLAYER, value)
 }
 // export const setModel = ({ commit }, value) => {
 //   let array = store.get(value)
@@ -46,6 +56,10 @@ export const setLogout = ({ commit }, value) => {
   pl.splice(value, 1)
   store.set('playGame', pl)
   commit(types.SET_LOGOUT, value)
+}
+export const setGameOver = ({ commit }) => {
+  store.set('player', [])
+  commit(types.SET_GAMEOVER)
 }
 export const setSeat = ({ commit }, value) => {
   let se = store.get('seat') !== undefined ? store.get('seat') : [false, false, false, false, false, false, false, false, false, false]

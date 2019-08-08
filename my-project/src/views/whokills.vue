@@ -48,7 +48,9 @@ export default {
       timer: '',
       ready: false,
       playerNumber: 99,
-      startKey: false
+      startKey: false,
+      player: [],
+      id: []
     }
   },
   computed: {
@@ -118,6 +120,7 @@ export default {
         vm.playGame = res.playGame
         vm.online = res.userName.length
         vm.sitseat = res.seat
+        vm.player = res.player
 
         console.log('username', this.memberList)
         console.log('playgame', this.playGame)
@@ -126,17 +129,27 @@ export default {
       })
     },
     startGame () {
-      let key = true
+      let key = false
       let vm = this
-      if (this.sitseat === [true, true, true, true, true, true, true, true, true, true]) { // check full seat
-        key = true
-      }
+      let count = 0
+      // for (let i = 0; this.sitseat.length; i++) {
+      //   if (this.sitseat[i] === true) {
+      //     count++
+      //   } else {
+      //     break
+      //   }
+      //   if (count === 10) {
+      //     key = true
+      //   }
+      // }
+      key = true
       if (key === true) {
         // 開始
         this.startKey = true
         window.clearInterval(this.timer)
-
-        this.setMode(this.OGMode)
+        let a = this.player
+        this.sortPlayer(this.player)
+        // this.setMode(this.OGMode)
 
         window.setTimeout(function () {
           $('.whokills').fadeOut(2000, function () {
@@ -147,9 +160,17 @@ export default {
         window.alert('位子未滿')
       }
     },
+    sortPlayer (arr) {
+      let a = arr
+      a.sort(() => { this.random() })
+      this.setPlayer(a)
+    },
     setMode (mode) { // set type of game. ex: OG
-      mode = mode.sort(() => { return Math.random() > 0.5 ? -1 : 1 })
+      mode = mode.sort(this.random())
       this.setIdentify(mode)
+    },
+    random () {
+      return Math.random() > 0.5 ? -1 : 1
     },
     closePage () {
       let num = this.memberList.indexOf(this.loginName)

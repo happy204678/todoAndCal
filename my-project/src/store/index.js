@@ -11,5 +11,5 @@ export default new Vuex.Store({
   getters,
   actions,
   // 嚴格模式，禁止直接修改 state
-  strict: true
+  strict: false
 })

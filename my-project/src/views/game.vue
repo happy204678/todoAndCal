@@ -1,6 +1,9 @@
 <template>
   <div class="game-bg">
     <div class="top">
+      <div>
+        <button @click="gameOver()">結束遊戲</button>
+      </div>
       <div class="word" style="display:none">
         <span>123</span>
       </div>
@@ -89,7 +92,7 @@ export default {
 
   },
   methods: {
-    ...mapActions(['setIp', 'setUserName', 'setPlayGame', 'setLogout', 'getData', 'setSeat', 'setIdentify']),
+    ...mapActions(['setIp', 'setUserName', 'setPlayGame', 'setLogout', 'getData', 'setSeat', 'setIdentify', 'setGameOver']),
     getdata (data) {
       var vm = this
 
@@ -104,6 +107,10 @@ export default {
         console.log('player : ', res.player)
         console.log('id : ', res.identify)
       })
+    },
+    gameOver () {
+      this.setGameOver()
+      this.closePage()
     },
     closePage () {
       let num = this.memberList.indexOf(this.loginName)
