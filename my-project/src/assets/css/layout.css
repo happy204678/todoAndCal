@@ -12,10 +12,10 @@ input {
   box-shadow: none;
 }
 button, .button {
-  height: 10.66667vw;
+  /* height: 10.66667vw; */
   border-radius: 2.66667vw;
   outline: none;
-  border: none;
+  /* border: none; */
 }
 .header {
     position: relative;
@@ -32,7 +32,7 @@ button, .button {
 }
 ul {
   list-style: none;
-  padding: inherit;
+  padding: initial;
 }
 div {
   margin: 0vw
@@ -111,41 +111,165 @@ div {
     height: 47px;
     width: 100%;
   }
-  .whokills {
+  .hall {
     display: none;
     position: relative;
     height: -webkit-fill-available;
-    /* background-image: url('../images/whokills/2.png'); */
     padding: 20px;
+    background-image: url('../images/whokills/forest.gif');
+    filter:alpha(opacity=100);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    opacity: .7;
   }
-  .whokills ul {
-    padding: 0vw;
-    margin: 1vw 0 0 0;
+  .hall .floatl {
+    float: left;
+    border: white 1px solid;
+    border-radius: 2vw
   }
-  .whokills .topdiv {
-    position: relative;
-    height: 300px;
-  }
-  .whokills .topdiv button {
+  .hall .floatr {
     float: right;
+    border: white 1px solid;
+    border-radius: 2vw
+  }
+  .hall .readymember {
     position: relative;
-    top: 124px;
-    right: 93px;
-    height: 40px;
-    width: 70px;
-    font-size: 18px;
+    width: 79vw;
+    height: 545px;
+    margin: 0 2vw 2vw 0;
+    background-color: rgba(19, 19, 19, 0.9)
   }
-  .whokills .joinMemberList {
+  .hall .member {
     position: relative;
-    overflow: overlay;
-    border-radius:10px;
+    width: 260px;
+    height: 430px;
+    margin: 0 0 2vw 0;
+    background-color: rgba(19, 19, 19, 0.6)
   }
-  .countPoeple{
-    position: fixed;
-    right: 52px;
-    top: 230px;
-    z-index: 10;
+  .hall .carddisplay {
+    position: relative;
+    width: 79vw;
+    height: 315px;
+    background-color: rgba(19, 19, 19, 0.6)
   }
+  .hall .modeselect {
+    width: 260px;
+    height: 430px;
+    background-color: rgba(19, 19, 19, 0.6)
+  }
+  .hall .readymember h1 {
+    position: absolute;
+    font-size: 100px;
+    margin: 0;
+    color: rgb(36, 36, 36);
+  }
+  .hall .readymember button {
+    position: absolute;
+    bottom: 10px;
+    width: 100px;
+    height: 50px;
+    left: 50%
+  }
+  .hall .member h3 {
+    text-align: center;
+    color: white;
+    margin-top: 6px
+  }
+  .hall .member .memberList {
+    margin: 1vw;
+    padding: 10px 16px 24px 16px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 17px;
+    height: 285px;
+  }
+  .hall .member .memberList .countPoeple{
+    position: absolute;
+    bottom: 85px;
+    right: 35px;
+    color: white
+  }
+  .hall .member .ready {
+    width: 100%;
+    text-align: center;
+  }
+  .hall .member button{
+    width: 60px;
+    height: 30px;
+    background-color: rgb(77, 77, 77);
+    border-color: rgb(121, 121, 121);
+    color: white
+  }
+  .hall .carddisplay .information {
+    width: 190px;
+    padding: 20px;
+    color: white;
+    font-size: 30px
+  }
+  .hall .carddisplay .card {
+    float: left;
+    width: 100%;
+  }
+  .hall .carddisplay img{
+    width: 130px;
+    height: 200px;
+    border-radius: 5px;
+    position: absolute;
+    top: 60px;
+    box-shadow:0px 0px 10px rgba(10,10,0.8);
+    float: left
+  }
+  .hall .carddisplay img:nth-child(1){
+    left:280px;
+    transform: rotate(-15deg)
+  }
+  .hall .carddisplay img:nth-child(2){
+    left:395px;
+    top: 40px;
+    transform: rotate(-6deg)
+  }
+  .hall .carddisplay img:nth-child(3){
+    left:500px;
+    top: 40px;
+    transform: rotate(6deg);
+  }
+  .hall .carddisplay img:nth-child(4){
+    left:615px;
+    transform: rotate(15deg)
+  }
+  .hall .carddisplay img:nth-child(5){
+    right: 258px;
+  }
+  .hall .carddisplay img:nth-child(6){
+    right: 160px;
+    z-index: 2;
+    top:40px
+  }
+  .hall .carddisplay img:nth-child(7){
+    right: 50px
+  }
+  .hall .modeselect h3 {
+    text-align: center;
+    color: white;
+    margin-top: 6px
+  }
+  .hall .modeselect div {
+    text-align: center;
+    margin: 1vw;
+    padding: 10px 16px 24px 16px;
+    border-radius: 17px;
+    height: 330px;
+  }
+  .hall .modeselect button {
+    height: 50px;
+    width: 100px;
+    background-color: rgb(77, 77, 77);
+    border-color: rgb(121, 121, 121)
+  }
+
+
+
+
+
   ::-webkit-scrollbar {
     width:5px;
   }
@@ -163,67 +287,12 @@ div {
     -webkit-box-shadow:inset 0 0 6px rgba(175, 175, 175, 0.3);
     background-color:#555;
   }
-  .whokills .topdiv h1 {
-    font: 700;
-    font-size: 100px;
-    margin: 0;
-  }
-  .whokills .topdiv div {
-    position: absolute;
-    right:0px;
-    top: 23px;
-    width: 200px;
-    height: 200px;
-    margin: 0 15px 0 0;
-    background-color: rgb(255, 247, 230);
-    border-style: double;
-    padding: 10px;
-  }
-  .row1, .row2, .row3 {
-    position: relative;
-    width: 100%;
-    height: 110px;
-    margin: 4.18vw auto 0 auto;
-    float: left
-  }
-  .row1 .active, .row2 .active, .row3 .active {
-    background-color: #ff0000
-  }
-  .memberSeat {
-    height: 100%;
-    position: relative;
-    width: 15.666%;
-    margin: 0 0 0 10.4px;
-    background-color:white;
-    float: left;
-    border-radius: 10px
-  }
-  .row1 :last-child {
-    margin-right: 0vw;
-  }
-  .mid {
-    margin: 0px 24vw;
-    width: 15vw;
-    height: 6vw;
-    color: white;
-    background-color: rgb(189, 0, 0);
-    font-size: 25px;
-    font-weight: bold;
-  }
-  .floatright {
-    float: right;
-  }
+
   .red {
     color: #ff0000;
     font-weight: bolder;
   }
 
 @media screen and (max-width: 600px){
-  .whokills .topdiv div {
-    position: relative;
-    margin: 0 auto;
-  }
-  .whokills .topdiv h1 {
-    text-align: center;
-  }
+
 }

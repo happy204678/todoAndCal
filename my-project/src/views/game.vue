@@ -189,7 +189,7 @@ export default {
   .top .identify .card-back {
     position:absolute;
     /* background-image: url('../assets/images/whokills/cardBack.jpg'); */
-    background-image: url('../assets/images/whokills/people.jpg');
+    background-image: url('../assets/images/whokills/1.jpg');
     background-size: 100% 100%;
     width: 100%;
     height: 100%;

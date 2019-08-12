@@ -8,7 +8,6 @@ const state = {
   playGame: store.get('playGame') !== undefined ? store.get('playGame') : [], // true/false
   player: store.get('player') !== undefined ? store.get('player') : [],
   online: 0,
-  seat: store.get('seat') !== undefined ? store.get('seat') : [false, false, false, false, false, false, false, false, false, false],
   OGMode: [1, 1, 1, 1, 2, 3, 4, 5, 5, 5] // 1平民 2女巫 3預言家 4獵人 5狼
 }
 
@@ -41,15 +40,13 @@ const mutations = {
   [types.SET_PLAYGAME] (state, payload) {
     state.playGame.splice(payload, 1, !state.playGame[payload])
   },
-  [types.SET_PLAYER] () {
+  [types.SET_PLAYER] (state, payload) {
+    state.player.push(payload)
   },
   [types.SET_POPPLAYER] (state, payload) {
     state.player.splice(payload, 1)
   },
   [types.SET_GAMEOVER] () {
-  },
-  [types.SET_SEAT] (state, payload) {
-    state.seat.splice(payload, 1, !state.seat[payload])
   },
   [types.GET_DATA] () {
   }

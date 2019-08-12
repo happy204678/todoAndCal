@@ -1,6 +1,6 @@
 <template>
-  <div class="whokills">
-    <div class="topdiv">
+  <div class="hall">
+    <!-- <div class="topdiv">
       <h1>狼人殺</h1>
       <div class="joinMemberList">
         <h3>人員列表</h3>
@@ -10,26 +10,49 @@
         <span class="countPoeple">{{memberList.length}}人</span>
       </div>
       <button @click="notready()">觀戰</button>
-    </div>
-    <div class="row1" v-if="sitseat.length > 0">
-      <div class="memberSeat" @click="sit(2)" :class="{'active': sitseat[2] === true}">3</div>
-      <div class="memberSeat" @click="sit(3)" :class="{'active': sitseat[3] === true}">4</div>
-      <div class="memberSeat" @click="sit(4)" :class="{'active': sitseat[4] === true}">5</div>
-      <div class="memberSeat" @click="sit(5)" :class="{'active': sitseat[5] === true}">6</div>
-      <div class="memberSeat" @click="sit(6)" :class="{'active': sitseat[6] === true}">7</div>
-      <div class="memberSeat floatright" @click="sit(7)" :class="{'active': sitseat[7] === true}">8</div>
-    </div>
-    <div class="row2" v-if="sitseat.length > 0">
-      <div class="memberSeat" @click="sit(1)" :class="{'active': sitseat[1] === true}">2</div>
-      <div class="memberSeat floatright" @click="sit(8)" :class="{'active': sitseat[8] === true}">9</div>
-    </div>
-    <div class="row3" v-if="sitseat.length > 0">
-      <div class="memberSeat" @click="sit(0)" :class="{'active': sitseat[0] === true}">1</div>
-      <button class="mid" @click="startGame()"><span>開始遊戲</span></button>
-      <div class="memberSeat floatright" @click="sit(9)" :class="{'active': sitseat[9] === true}">10</div>
-    </div>
-    <!-- <div class="chatArea">
     </div> -->
+    <div class="readymember floatl">
+      <h1>狼人殺</h1>
+      <button>開始遊戲</button>
+    </div>
+    <div class="member floatr">
+      <h3>人員列表</h3>
+      <div class="memberList">
+        <ul v-if="memberList.length > 0">
+          <li v-for="(member, index) in memberList" :key="index" :class="{'red': member === loginName}"><span>{{member}}</span></li>
+        </ul>
+        <span class="countPoeple">{{memberList.length}}人</span>
+      </div>
+      <div class="ready">
+        <button @click="sit()">入座</button>
+      </div>
+    </div>
+    <div class="modeselect floatr">
+      <h3>模式選擇</h3>
+      <div>
+        <button class="modebutton">OG</button>
+      </div>
+    </div>
+    <div class="carddisplay floatl">
+      <div class="information">
+        <ul>
+          <li>4民</li>
+          <li>1預言家</li>
+          <li>1女巫</li>
+          <li>1獵人</li>
+          <li>3狼</li>
+        </ul>
+      </div>
+      <div class="card">
+        <img src="../assets/images/whokills/1.jpg"/>
+        <img src="../assets/images/whokills/eyes.jpg"/>
+        <img src="../assets/images/whokills/witch.jpg"/>
+        <img src="../assets/images/whokills/hunter.jpg"/>
+        <img src="../assets/images/whokills/wolf.jpg"/>
+        <img src="../assets/images/whokills/wolf.jpg"/>
+        <img src="../assets/images/whokills/wolf.jpg"/>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -43,11 +66,8 @@ export default {
       loginName: '',
       memberList: [],
       playGame: [],
-      sitseat: [],
-      sitnumber: 99,
       timer: '',
       ready: false,
-      playerNumber: 99,
       startKey: false,
       player: [],
       id: []
@@ -61,7 +81,7 @@ export default {
   mounted () {
     var vm = this
 
-    $('.whokills').fadeIn(2000)
+    $('.hall').fadeIn(2000)
 
     if (this.$route.params.id) {
       vm.loginName = vm.$route.params.id
@@ -82,23 +102,21 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setIp', 'setUserName', 'setPlayGame', 'setLogout', 'getData', 'setSeat', 'setPlayer', 'setIdentify']),
+    ...mapActions(['setIp', 'setUserName', 'setPlayGame', 'setLogout', 'getData', 'setPlayer', 'setIdentify']),
     sit (number) {
-      if (this.sitnumber === 99) { // 第一次入座
+      if (!this.ready) { // 第一次入座
         // set state
         let num = this.memberList.indexOf(this.loginName)
-        this.playerNumber = num
         this.setPlayGame(num) // state
         this.sitnumber = number // store sit num
-        this.setSeat(number) // active
         this.setPlayer(this.loginName)
+        this.ready = true
       } else { // 已入座
         if (number === this.sitnumber) {
         } else if (this.sitseat[number] === true) {
           window.alert('有人坐了')
           this.sitseat[this.sitnumber] = false
         } else if (this.sitseat[number] === false) { // change seat
-          this.setSeat(this.sitnumber) // state
           this.sitnumber = number
           this.setSeat(number) // state
         }
@@ -119,12 +137,10 @@ export default {
         vm.memberList = res.userName
         vm.playGame = res.playGame
         vm.online = res.userName.length
-        vm.sitseat = res.seat
         vm.player = res.player
 
         console.log('username', this.memberList)
         console.log('playgame', this.playGame)
-        console.log('seat : ', this.sitseat)
         console.log('online : ', this.online)
       })
     },
@@ -152,7 +168,7 @@ export default {
         // this.setMode(this.OGMode)
 
         window.setTimeout(function () {
-          $('.whokills').fadeOut(2000, function () {
+          $('.hall').fadeOut(2000, function () {
             vm.$router.push({ path: '/game/' + vm.loginName })
           })
         }, 500)

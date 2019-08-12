@@ -5,5 +5,4 @@ export const identify = state => { return state.identify }
 export const playGame = state => { return state.playGame }
 export const player = state => { return state.player }
 export const online = state => { return state.userName.length }
-export const seat = state => { return state.seat }
 export const OGMode = state => { return state.OGMode }
