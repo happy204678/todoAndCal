@@ -134,7 +134,7 @@ div {
   }
   .hall .readymember {
     position: relative;
-    width: 79vw;
+    width: 74vw;
     height: 545px;
     margin: 0 2vw 2vw 0;
     background-color: rgba(19, 19, 19, 0.9)
@@ -149,7 +149,7 @@ div {
   }
   .hall .carddisplay {
     position: relative;
-    width: 79vw;
+    width: 74vw;
     height: 315px;
     background-color: rgba(19, 19, 19, 0.6)
   }

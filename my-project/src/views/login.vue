@@ -47,7 +47,6 @@ export default {
     this.timer = setInterval(function () {
       vm.getdata()
     }, 1000)
-
   },
   methods: {
     ...mapActions(['setUserName', 'getData']),

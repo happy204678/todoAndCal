@@ -4,8 +4,8 @@
       <div>
         <button @click="gameOver()">結束遊戲</button>
       </div>
-      <div class="word" style="display:none">
-        <span>123</span>
+      <div class="word">
+        <span>請確認自己的身分...</span>
       </div>
       <div class="identify" v-if="players.includes(loginName)">
         <div class="card-front"></div>
@@ -14,17 +14,25 @@
         </div>
       </div>
     </div>
-    <div class="player" v-if="players.length > 0">
+    <div class="play" v-if="player.length > 0">
       <ul>
-        <li v-for="(player, index) in players" :key="index">
+        <li v-for="(play, index) in players" :key="index" @click="vote()">
           <div>
-            <span>{{index}}</span><p>{{player}}</p>
+            <span>{{index + 1}}</span><p>{{play}}</p>
           </div>
         </li>
       </ul>
     </div>
     <div class="pass-bt">
       <button>結束發言</button>
+    </div>
+    <div class="night">
+      <div class="wolfvote" v-if="player.indexOf(loginName) === 5">
+
+      </div>
+      <div class="witch" v-if="player.indexOf(loginName) === 2"></div>
+      <div class="eyes" v-if="player.indexOf(loginName) === 3"></div>
+      <div></div>
     </div>
   </div>
 </template>
@@ -40,13 +48,14 @@ export default {
     return {
       loginName: '',
       memberList: [],
-      players: [],
+      player: [],
       online: 0,
       timer: '',
       randomSort: [],
       gameModelOG: [1, 1, 1, 2, 3, 4, 5, 5, 5],
       identify: [],
       gameStart: Boolean,
+      night: false
     }
   },
   watch: {
@@ -95,12 +104,6 @@ export default {
         })
       }
     }, 300)
-    window.onunload = function (e) { // close page
-      vm.closePage()
-    }
-    window.onload = (e) => { // 重整
-      vm.closePage()
-    }
 
   },
   methods: {
@@ -110,16 +113,21 @@ export default {
 
       this.getData().then((res) => {
         vm.memberList = res.userName
-        vm.players = res.player
+        vm.player = res.player
         vm.online = res.userName.length
         vm.identify = res.identify
         vm.gameStart = res.gameStart
 
         console.log('username', this.memberList)
         console.log('online : ', this.online)
-        console.log('players : ', this.players)
+        console.log('player : ', this.player)
         console.log('id : ', this.identify)
       })
+    },
+    vote () {
+      if (this.night) {
+
+      }
     },
     gameOver () {
       this.setGameOver()
@@ -160,15 +168,13 @@ export default {
   }
   .top .word {
     position: absolute;
-    background-color: #815400;
     border-radius: 1vw;
-    border: 2px solid rgb(82, 49, 0);
+    font-size: 57px;
     top: 13vw;
     left:29vw;
     color: aliceblue;
-    width: 45vw;
+    width: 500px;
     height: 10vw;
-    box-shadow:0px 0px 10px rgba(10,10,0.8);
     vertical-align: middle
   }
   .top .identify {
@@ -180,11 +186,9 @@ export default {
     transform-style:preserve-3d;
     transition:0.5s all ease;
     box-shadow:0px 0px 10px rgba(10,10,0.8);
-
   }
   .top .identify:hover {
   transform:rotateY(180deg);
-
   }
   .top .identify .card-front {
     position:absolute;
@@ -231,7 +235,7 @@ export default {
   }
   .player ul li:hover {
     transform:scale(1.15,1.15);
-    z-index: 6
+    z-index: 7
   }
   .player ul li div{
     width: 100%;
@@ -263,7 +267,6 @@ export default {
     z-index: 5;
     bottom: 5vw
   }
-  /* 15vw 7vw 2vw */
   .player ul :nth-child(2) {
     left: 12vw;;
     bottom: 10vw;
@@ -307,5 +310,13 @@ export default {
     height: auto;
     font-size: 3vw;
     background: #08002e
+  }
+  .night {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+    background-color: rgb(0, 0, 0, .7)
   }
 </style>

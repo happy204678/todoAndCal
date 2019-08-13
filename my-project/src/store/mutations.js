@@ -8,6 +8,7 @@ const state = {
   player: store.get('player') !== undefined ? store.get('player') : [],
   online: 0,
   gameStart: store.get('gameStart') !== undefined ? store.get('gameStart') : false,
+  night: store.get('night') !== undefined ? store.get('night') : false,
   OGMode: [1, 1, 1, 1, 2, 3, 4, 5, 5, 5] // 1平民 2女巫 3預言家 4獵人 5狼
 }
 
@@ -39,6 +40,9 @@ const mutations = {
   },
   [types.SET_POPPLAYER] (state, payload) {
     state.player.splice(payload, 1)
+  },
+  [types.SET_SORTPLAYER] (state, payload) {
+    state.player = payload
   },
   [types.SET_GAMEOVER] (state) {
     state.player = []

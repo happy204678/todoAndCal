@@ -18,6 +18,10 @@ export const setPlayer = ({ commit }, value) => {
   store.set('player', array)
   commit(types.SET_PLAYER, value)
 }
+export const setSortPlayer = ({ commit }, value) => {
+  store.set('player', value)
+  commit(types.SET_SORTPLAYER, value)
+}
 export const setPopPlayer = ({ commit }, value) => {
   let array = store.get('player')
   array.splice(value, 1)

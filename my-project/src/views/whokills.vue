@@ -126,7 +126,7 @@ export default {
     // }
   },
   methods: {
-    ...mapActions(['setUserName', 'setLogout', 'getData', 'setPlayer', 'setIdentify', 'setPopPlayer', 'setGameStart']),
+    ...mapActions(['setUserName', 'setLogout', 'getData', 'setPlayer', 'setIdentify', 'setPopPlayer', 'setGameStart', 'setSortPlayer']),
     sit () {
       if (this.player.indexOf(this.loginName) < 0) { // 入座
         this.setPlayer(this.loginName)
@@ -155,12 +155,14 @@ export default {
     },
     startGame () {
       let vm = this
-
+      // this.setIdentify(this.OGMode)
       // 開始
       window.clearInterval(this.timer)
       let a = this.player
-      // this.sortPlayer(this.player)
-      // this.setMode(this.OGMode)
+
+      // sort
+      this.setSortPlayer(this.shuffle(this.player))
+      this.setIdentify(this.shuffle(this.OGMode))
       this.setGameStart()
       window.setTimeout(function () {
         $('.hall').fadeOut(2000, function () {
@@ -173,9 +175,21 @@ export default {
       a.sort(() => { this.random() })
       this.setPlayer(a)
     },
-    setMode (mode) { // set type of game. ex: OG
+    sortMode (mode) { // set type of game. ex: OG
       mode = mode.sort(this.random())
       this.setIdentify(mode)
+    },
+    shuffle (arr) {
+      let len = arr.length;
+
+      while (len) {
+        let i = (Math.random() * len--) >> 0
+        // 交换位置
+        let temp = arr[len]
+        arr[len] = arr[i]
+        arr[i] = temp
+      }
+      return arr
     },
     random () {
       return Math.random() > 0.5 ? -1 : 1
