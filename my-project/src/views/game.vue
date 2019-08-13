@@ -7,23 +7,20 @@
       <div class="word" style="display:none">
         <span>123</span>
       </div>
-      <div class="identify">
+      <div class="identify" v-if="players.includes(loginName)">
         <div class="card-front"></div>
-        <div class="card-back"></div>
+        <div class="card-back">
+          <img v-if="identify.length > 0" :src="'/static/image/whokills/id' + identify[players.indexOf(loginName)] + '.jpg'"/>
+        </div>
       </div>
     </div>
-    <div class="player">
+    <div class="player" v-if="players.length > 0">
       <ul>
-        <li><div><span>1</span><p>{{loginName}}</p></div></li>
-        <li><div><span>2</span><p></p></div></li>
-        <li><div><span>3</span><p></p></div></li>
-        <li><div><span>4</span><p></p></div></li>
-        <li><div><span>5</span><p></p></div></li>
-        <li><div><span>6</span><p></p></div></li>
-        <li><div><span>7</span><p></p></div></li>
-        <li><div><span>8</span><p></p></div></li>
-        <li><div><span>9</span><p></p></div></li>
-        <li><div><span>10</span><p></p></div></li>
+        <li v-for="(player, index) in players" :key="index">
+          <div>
+            <span>{{index}}</span><p>{{player}}</p>
+          </div>
+        </li>
       </ul>
     </div>
     <div class="pass-bt">
@@ -36,17 +33,28 @@
 
 import { mapActions, mapGetters } from 'vuex'
 import $ from 'jquery'
+import { setTimeout } from 'timers';
 
 export default {
   data () {
     return {
       loginName: '',
       memberList: [],
-      playGame: [],
+      players: [],
       online: 0,
       timer: '',
       randomSort: [],
-      gameModelOG: [1, 1, 1, 2, 3, 4, 5, 5, 5]
+      gameModelOG: [1, 1, 1, 2, 3, 4, 5, 5, 5],
+      identify: [],
+      gameStart: Boolean,
+    }
+  },
+  watch: {
+    gameStart (val) {
+      let vm = this
+      if (!val) {
+        vm.gameOver()
+      }
     }
   },
   mounted () {
@@ -58,16 +66,25 @@ export default {
     }
 
     $('.game-bg').fadeIn(1000)
-    $('.player ul li:nth-child(1)').fadeIn(300, () => {
-      $('.player ul li:nth-child(2)').fadeIn(300, () => {
-        $('.player ul li:nth-child(3)').fadeIn(300, () => {
-          $('.player ul li:nth-child(4)').fadeIn(300, () => {
-            $('.player ul li:nth-child(5)').fadeIn(300, () => {
-              $('.player ul li:nth-child(6)').fadeIn(300, () => {
-                $('.player ul li:nth-child(7)').fadeIn(300, () => {
-                  $('.player ul li:nth-child(8)').fadeIn(300, () => {
-                    $('.player ul li:nth-child(9)').fadeIn(300, () => {
-                      $('.player ul li:nth-child(10)').fadeIn(300, () => {
+
+
+    this.timer = setInterval(function () {
+      vm.getdata()
+    }, 300)
+    setTimeout(() => {
+      if (this.players.length > 0) {
+        $('.player ul li:nth-child(1)').fadeIn(300, () => {
+          $('.player ul li:nth-child(2)').fadeIn(300, () => {
+            $('.player ul li:nth-child(3)').fadeIn(300, () => {
+              $('.player ul li:nth-child(4)').fadeIn(300, () => {
+                $('.player ul li:nth-child(5)').fadeIn(300, () => {
+                  $('.player ul li:nth-child(6)').fadeIn(300, () => {
+                    $('.player ul li:nth-child(7)').fadeIn(300, () => {
+                      $('.player ul li:nth-child(8)').fadeIn(300, () => {
+                        $('.player ul li:nth-child(9)').fadeIn(300, () => {
+                          $('.player ul li:nth-child(10)').fadeIn(300, () => {
+                          })
+                        })
                       })
                     })
                   })
@@ -76,13 +93,8 @@ export default {
             })
           })
         })
-      })
-    })
-
-    this.timer = setInterval(function () {
-      vm.getdata()
+      }
     }, 300)
-
     window.onunload = function (e) { // close page
       vm.closePage()
     }
@@ -92,20 +104,21 @@ export default {
 
   },
   methods: {
-    ...mapActions(['setIp', 'setUserName', 'setPlayGame', 'setLogout', 'getData', 'setSeat', 'setIdentify', 'setGameOver']),
+    ...mapActions(['setIp', 'setUserName', 'setLogout', 'getData', 'setIdentify', 'setGameOver']),
     getdata (data) {
       var vm = this
 
       this.getData().then((res) => {
         vm.memberList = res.userName
-        vm.playGame = res.playGame
+        vm.players = res.player
         vm.online = res.userName.length
+        vm.identify = res.identify
+        vm.gameStart = res.gameStart
 
         console.log('username', this.memberList)
-        console.log('playgame', this.playGame)
         console.log('online : ', this.online)
-        console.log('player : ', res.player)
-        console.log('id : ', res.identify)
+        console.log('players : ', this.players)
+        console.log('id : ', this.identify)
       })
     },
     gameOver () {
@@ -116,9 +129,6 @@ export default {
       let num = this.memberList.indexOf(this.loginName)
       if (num >= 0) {
         this.setLogout(num)
-        if (this.playGame[num] === true) {
-          this.setSeat(this.sitnumber)
-        }
       }
       window.clearInterval(this.timer)
       this.$router.push({ path: '/login' })
@@ -189,13 +199,17 @@ export default {
   .top .identify .card-back {
     position:absolute;
     /* background-image: url('../assets/images/whokills/cardBack.jpg'); */
-    background-image: url('../assets/images/whokills/1.jpg');
-    background-size: 100% 100%;
+    /* background-image: url('../assets/images/whokills/1.jpg'); */
+    width: 100%;
+    height: 100%;
+
+    backface-visibility:hidden;
+    transform:rotateY(180deg);
+  }
+  .top .identify .card-back img{
     width: 100%;
     height: 100%;
     border-radius: 1vw;
-    backface-visibility:hidden;
-    transform:rotateY(180deg);
   }
   .player {
     width: 100%;

@@ -15,7 +15,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['userName', 'ip', 'identify', 'playGame', 'online']),
+    ...mapGetters(['userName', 'ip', 'identify', 'online']),
   },
   mounted () {
     var vm = this

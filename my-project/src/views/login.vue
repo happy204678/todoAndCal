@@ -22,13 +22,17 @@ export default {
     return {
       name: '',
       permissionList: ['陳宥丞', '123', '葉佳霖', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', 'Kenny'], // 人名登入
-      permissionKey: false
+      permissionKey: false,
+      timer: '',
+      online: 0,
+      userName: ''
     }
   },
   computed: {
-    ...mapGetters(['userName', 'ip', 'identify', 'playGame', 'online', 'seat'])
+    // ...mapGetters(['userName', 'identify', 'online', 'player'])
   },
   mounted () {
+    var vm = this
     $('.title').fadeIn(0, function () {
       $('.title').animate({fontSize: '15vw'}, 100, function () {
         $('.title').animate({fontSize: '10vw'}, 500, function () {
@@ -39,12 +43,27 @@ export default {
     window.setTimeout(function () {
       $('.login').fadeIn(2000)
     }, 900)
-    console.log('userName', (typeof this.userName), this.userName)
-    console.log('playGame', (typeof this.playGame), this.playGame)
-    console.log('seat', (typeof this.seat), this.seat)
+
+    this.timer = setInterval(function () {
+      vm.getdata()
+    }, 1000)
+
   },
   methods: {
-    ...mapActions(['setIp', 'setUserName', 'setPlayGame']),
+    ...mapActions(['setUserName', 'getData']),
+    getdata () {
+      var vm = this
+
+      this.getData().then((res) => {
+        vm.userName = res.userName
+        vm.online = res.userName.length
+        vm.player = res.player
+
+        console.log('username', this.userName)
+        console.log('player', this.player)
+        console.log('online : ', this.online)
+      })
+    },
     doLogin () {
       var vm = this
       // permission
@@ -53,15 +72,12 @@ export default {
           vm.permissionKey = true
         }
       }
-
-      // console.log('userName ', (typeof vm.userName))
       // success & check this name is logining now
       if (vm.permissionKey && (vm.userName === undefined || !vm.userName.includes(vm.name))) {
         // store ip name number
         // console.log(returnCitySN["cip"], returnCitySN["cname"]) // 118.163.88.174 台湾省
 
         vm.setUserName(vm.name)
-
         vm.goWhoKills()
       // failure
       } else {
@@ -80,6 +96,9 @@ export default {
         })
       }, 500)
     }
-  }
+  },
+  beforeDestroy () {
+    window.clearInterval(this.timer)
+  },
 }
 </script>

@@ -13,18 +13,19 @@
     </div> -->
     <div class="readymember floatl">
       <h1>狼人殺</h1>
-      <button>開始遊戲</button>
+      <button v-if="player.indexOf(loginName) === 0" @click="startGame" :disabled="disabled">開始遊戲</button>
     </div>
     <div class="member floatr">
       <h3>人員列表</h3>
+      <button @click="closePage()">登出</button>
       <div class="memberList">
         <ul v-if="memberList.length > 0">
-          <li v-for="(member, index) in memberList" :key="index" :class="{'red': member === loginName}"><span>{{member}}</span></li>
+          <li v-for="(member, index) in memberList" :key="index" :class="{'red': member === loginName}"><span>{{member}}</span><span v-if="player.indexOf(member) >= 0">準備</span></li>
         </ul>
         <span class="countPoeple">{{memberList.length}}人</span>
       </div>
       <div class="ready">
-        <button @click="sit()">入座</button>
+        <button @click="sit()">{{sitvalue}}</button>
       </div>
     </div>
     <div class="modeselect floatr">
@@ -44,13 +45,13 @@
         </ul>
       </div>
       <div class="card">
-        <img src="../assets/images/whokills/1.jpg"/>
-        <img src="../assets/images/whokills/eyes.jpg"/>
-        <img src="../assets/images/whokills/witch.jpg"/>
-        <img src="../assets/images/whokills/hunter.jpg"/>
-        <img src="../assets/images/whokills/wolf.jpg"/>
-        <img src="../assets/images/whokills/wolf.jpg"/>
-        <img src="../assets/images/whokills/wolf.jpg"/>
+        <img src="/static/image/whokills/id1.jpg"/>
+        <img src="/static/image/whokills/id3.jpg"/>
+        <img src="/static/image/whokills/id2.jpg"/>
+        <img src="/static/image/whokills/id4.jpg"/>
+        <img src="/static/image/whokills/id5.jpg"/>
+        <img src="/static/image/whokills/id5.jpg"/>
+        <img src="/static/image/whokills/id5.jpg"/>
       </div>
     </div>
   </div>
@@ -65,116 +66,107 @@ export default {
     return {
       loginName: '',
       memberList: [],
-      playGame: [],
       timer: '',
-      ready: false,
-      startKey: false,
+      startKey: Boolean,
       player: [],
-      id: []
+      id: [],
+      sitvalue: '準備',
+      disabled: false
     }
   },
   computed: {
      ...mapGetters(['OGMode'])
   },
   watch: {
+    // player (val) {
+    //   if (val.length === 10) {
+    //     this.disabled = false
+    //   } else {
+    //     this.disabled = true
+    //   }
+    // },
+    startKey (val) {
+      let vm = this
+      if (val) {
+        window.setTimeout(function () {
+          $('.hall').fadeOut(2000, function () {
+            vm.$router.push({ path: '/game/' + vm.loginName })
+          })
+        }, 500)
+      }
+    }
+
   },
   mounted () {
     var vm = this
 
     $('.hall').fadeIn(2000)
 
+    // catch login name
     if (this.$route.params.id) {
       vm.loginName = vm.$route.params.id
     } else {
       this.$router.push({ path: '/login' })
     }
+
+    //抓data
     this.timer = setInterval(function () {
       vm.getdata()
     }, 300)
 
-    if (this.startKey === false) {
-      window.onunload = function (e) { // close page
-        vm.closePage()
-      }
-      window.onload = (e) => { // 重整
-        vm.closePage()
-      }
-    }
+    // if (this.startKey === false) {
+    //   window.onunload = function (e) { // close page
+    //     window.alert('on')
+    //     vm.closePage()
+    //   }
+    //   window.onload = (e) => { // 重整
+    //   window.alert('re')
+    //     vm.closePage()
+    //   }
+    // }
   },
   methods: {
-    ...mapActions(['setIp', 'setUserName', 'setPlayGame', 'setLogout', 'getData', 'setPlayer', 'setIdentify']),
-    sit (number) {
-      if (!this.ready) { // 第一次入座
-        // set state
-        let num = this.memberList.indexOf(this.loginName)
-        this.setPlayGame(num) // state
-        this.sitnumber = number // store sit num
+    ...mapActions(['setUserName', 'setLogout', 'getData', 'setPlayer', 'setIdentify', 'setPopPlayer', 'setGameStart']),
+    sit () {
+      if (this.player.indexOf(this.loginName) < 0) { // 入座
         this.setPlayer(this.loginName)
-        this.ready = true
-      } else { // 已入座
-        if (number === this.sitnumber) {
-        } else if (this.sitseat[number] === true) {
-          window.alert('有人坐了')
-          this.sitseat[this.sitnumber] = false
-        } else if (this.sitseat[number] === false) { // change seat
-          this.sitnumber = number
-          this.setSeat(number) // state
-        }
+        this.sitvalue = '觀戰'
+      } else { // 觀戰
+        let num = this.player.indexOf(this.loginName)
+        this.setPopPlayer(num)
+        this.sitvalue = '準備'
       }
     },
-    notready () {
-      if (this.sitnumber !== 99) {
-        this.setSeat(this.sitnumber)
-        let num = this.memberList.indexOf(this.loginName)
-        this.setPlayGame(num)
-        this.sitnumber = 99
-      }
-    },
-    getdata (data) {
+    getdata () {
       var vm = this
 
       this.getData().then((res) => {
         vm.memberList = res.userName
-        vm.playGame = res.playGame
         vm.online = res.userName.length
         vm.player = res.player
+        vm.startKey = res.gameStart
 
+        console.log('loginName', this.loginName)
         console.log('username', this.memberList)
-        console.log('playgame', this.playGame)
+        console.log('player', this.player)
         console.log('online : ', this.online)
+        console.log(vm.startKey)
       })
     },
     startGame () {
-      let key = false
       let vm = this
-      let count = 0
-      // for (let i = 0; this.sitseat.length; i++) {
-      //   if (this.sitseat[i] === true) {
-      //     count++
-      //   } else {
-      //     break
-      //   }
-      //   if (count === 10) {
-      //     key = true
-      //   }
-      // }
-      key = true
-      if (key === true) {
-        // 開始
-        this.startKey = true
-        window.clearInterval(this.timer)
-        let a = this.player
-        this.sortPlayer(this.player)
-        // this.setMode(this.OGMode)
 
-        window.setTimeout(function () {
-          $('.hall').fadeOut(2000, function () {
-            vm.$router.push({ path: '/game/' + vm.loginName })
-          })
-        }, 500)
-      } else {
-        window.alert('位子未滿')
-      }
+      // 開始
+      window.clearInterval(this.timer)
+      let a = this.player
+      // this.sortPlayer(this.player)
+      // this.setMode(this.OGMode)
+      this.setGameStart()
+      window.setTimeout(function () {
+        $('.hall').fadeOut(2000, function () {
+          vm.$router.push({ path: '/game/' + vm.loginName })
+        })
+      }, 500)
     },
     sortPlayer (arr) {
       let a = arr
@@ -190,23 +182,24 @@ export default {
     },
     closePage () {
       let num = this.memberList.indexOf(this.loginName)
+      let playernum = this.player.indexOf(this.loginName)
       if (num >= 0) {
         this.setLogout(num)
-        if (this.playGame[num] === true) {
-          this.setSeat(this.sitnumber)
-        }
       }
+      if (playernum >= 0) {
+        this.setPopPlayer(playernum)
+      }
+
       window.clearInterval(this.timer)
       this.$router.push({ path: '/login' })
     }
   },
   beforeDestroy () {
-    if (this.startKey === false) {
-      this.closePage()
-    }
+    // window.alert('on')
+    // this.closePage()
   },
   destroyed () {
-
+    window.clearInterval(this.timer)
   }
 }
 </script>

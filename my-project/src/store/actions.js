@@ -7,24 +7,10 @@ export const setUserName = ({ commit }, value) => {
   array.push(value)
   store.set('userName', array)
   commit(types.SET_USERNAME, value)
-
-  let array2 = store.get('playGame') !== undefined ? store.get('playGame') : [] // set not ready
-  array2.push(false)
-  store.set('playGame', array2)
-  commit(types.SET_PLAYGAME, false)
 }
 export const setIdentify = ({ commit }, value) => {
   store.set('identify', value)
   commit(types.SET_IDENTIFY, value)
-}
-// export const setIp = ({ commit }, value) => {
-//   commit(types.SET_IP, value)
-// }
-export const setPlayGame = ({ commit }, value) => {
-  let array = store.get('playGame')
-  array.splice(value, 1, !array[value])
-  store.set('playGame', array)
-  commit(types.SET_PLAYGAME, value)
 }
 export const setPlayer = ({ commit }, value) => {
   let array = store.get('player') !== undefined ? store.get('player') : []
@@ -48,22 +34,24 @@ export const setLogout = ({ commit }, value) => {
   us.splice(value, 1)
   store.set('userName', us)
 
-  let pl = store.get('playGame')
-  pl.splice(value, 1)
-  store.set('playGame', pl)
   commit(types.SET_LOGOUT, value)
+}
+export const setGameStart = ({ commit }) => {
+  store.set('gameStart', true)
+  commit(types.SET_GAMESTART)
 }
 export const setGameOver = ({ commit }) => {
   store.set('player', [])
+  store.set('gameStart', false)
   commit(types.SET_GAMEOVER)
 }
 export const getData = ({ commit }) => {
   commit(types.GET_DATA)
   let data = {
     userName: store.get('userName'),
-    playGame: store.get('playGame'),
     player: store.get('player') !== undefined ? store.get('player') : [],
-    identify: store.get('identify') !== undefined ? store.get('identify') : []
+    identify: store.get('identify') !== undefined ? store.get('identify') : [],
+    gameStart: store.get('gameStart') !== undefined ? store.get('gameStart') : false
   }
   return data
 }
