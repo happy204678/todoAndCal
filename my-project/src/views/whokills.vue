@@ -112,7 +112,7 @@ export default {
     //抓data
     this.timer = setInterval(function () {
       vm.getdata()
-    }, 300)
+    }, 1000)
 
     // if (this.startKey === false) {
     //   window.onunload = function (e) { // close page

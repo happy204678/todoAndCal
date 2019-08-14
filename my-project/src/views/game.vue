@@ -2,36 +2,73 @@
   <div class="game-bg">
     <div class="top">
       <div>
-        <button @click="gameOver()">結束遊戲</button>
+        <button @click="gameOver()" style="z-index: 100">結束遊戲</button>
       </div>
-      <div class="word">
-        <span>請確認自己的身分...</span>
+      <div class="word" v-if="!night">
+        <span v-if="nightCount === 0">請確認自己的身分...</span>
+
+        <span v-if="step === 0">天亮請睜眼。昨晚{{}}號被殺死了。<br>死者請至淘汰區。</span>
+        <span v-if="step === 1">請發表遺言。</span>
+        <span v-if="step === 2 && player[1].length > 0">1號發言...</span>
+        <span v-if="step === 3 && player[2].length > 0">2號發言...</span>
+        <span v-if="step === 4 && player[3].length > 0">3號發言...</span>
+        <span v-if="step === 5 && player[4].length > 0">4號發言...</span>
+        <span v-if="step === 6 && player[5].length > 0">5號發言...</span>
+        <span v-if="step === 7 && player[6].length > 0">6號發言...</span>
+        <span v-if="step === 8 && player[7].length > 0">7號發言...</span>
+        <span v-if="step === 9 && player[8].length > 0">8號發言...</span>
+        <span v-if="step === 10 && player[9].length > 0">9號發言...</span>
+        <span v-if="step === 11 && player[10].length > 0">10號發言...</span>
+        <span v-if="step === 12">請選擇您要投票的人。</span>
       </div>
-      <div class="identify" v-if="players.includes(loginName)">
+      <div class="identify" v-if="player.includes(loginName)">
         <div class="card-front"></div>
         <div class="card-back">
-          <img v-if="identify.length > 0" :src="'/static/image/whokills/id' + identify[players.indexOf(loginName)] + '.jpg'"/>
+          <imgv-if="identify.length > 0" :src="'/static/image/whokills/id' + identify[player.indexOf(loginName)] + '.jpg'"/>
         </div>
       </div>
     </div>
-    <div class="play" v-if="player.length > 0">
+    <div class="player" v-if="player.length > 0">
       <ul>
-        <li v-for="(play, index) in players" :key="index" @click="vote()">
+        <li v-for="(play, index) in player" :key="index" @click="vote(index)" :class="{'light': night && step === 1 && identify[player.indexOf(loginName)] === 5 && identify[player.indexOf(play)] === 5}">
           <div>
-            <span>{{index + 1}}</span><p>{{play}}</p>
+            <span>{{index + 1}}號位</span>
+            <p :class="{'red': play === loginName}">{{play}}</p>
           </div>
         </li>
       </ul>
     </div>
     <div class="pass-bt">
-      <button>結束發言</button>
+      <button v-if="!night && step <= 11 && step >=2" @click="nextstep" >結束發言</button>
     </div>
-    <div class="night">
-      <div class="wolfvote" v-if="player.indexOf(loginName) === 5">
+    <div class="night" v-if="night">
+      <span v-if="step === 1">狼人現身請睜眼，請選擇要殺害的對象。</span>
+      <span v-if="step === 2">狼人請閉眼。</span>
+      <span v-if="step === 3">女巫請睜眼，他被殺死了，你要救他嗎？</span>
+      <span v-if="step === 4">你要使用毒藥嗎？</span>
+      <span v-if="step === 5">女巫請閉眼。</span>
+      <span v-if="step === 6">預言家請睜眼，請選擇您要查驗的對象。</span>
+      <span v-if="step === 7">預言家請閉眼。</span>
+
+      <div class="wolfvote nightAction" v-if="(step === 1) && identify[player.indexOf(loginName)] === 5">
+        <div v-for="(play, index) in player.filter(id => identify[player.indexOf(id)] === 5)" :key="index">
+          <p>{{play}}選擇殺{{killed}}</p>
+        </div>
+        <div class="selectnumber">
+          <button v-for="i in 10" :key="i" @click="vote(i)">{{i}}號</button>
+        </div>
+        <button>確定</button>
+      </div>
+
+      <div class="witch nightAction" v-if="(step === 3 || step === 4) && identify[player.indexOf(loginName)] === 2">
 
       </div>
-      <div class="witch" v-if="player.indexOf(loginName) === 2"></div>
-      <div class="eyes" v-if="player.indexOf(loginName) === 3"></div>
+      <div class="eyes nightAction" v-if="(step === 6) && identify[player.indexOf(loginName)] === 3">
+        <div class="selectnumber">
+          <button v-for="i in 10" :key="i" @click="eye(i)">{{i}}號</button>
+        </div>
+        <span class="eyecheck" >{{tmpeyesnumber}}號是{{goodman}}</span>
+      </div>
       <div></div>
     </div>
   </div>
@@ -41,7 +78,6 @@
 
 import { mapActions, mapGetters } from 'vuex'
 import $ from 'jquery'
-import { setTimeout } from 'timers';
 
 export default {
   data () {
@@ -55,7 +91,15 @@ export default {
       gameModelOG: [1, 1, 1, 2, 3, 4, 5, 5, 5],
       identify: [],
       gameStart: Boolean,
-      night: false
+      night: true,
+      step: Number,
+      button: '',
+      voteNum: Number,
+      killed: 1,
+      voteRes: [],
+      tmpeyesnumber: Number,
+      goodman: '',
+      nightCount: Number
     }
   },
   watch: {
@@ -63,6 +107,97 @@ export default {
       let vm = this
       if (!val) {
         vm.gameOver()
+      }
+    },
+    step (val) {
+      let vm = this
+
+      if (this.night) {
+        switch (val) {
+          case 0:
+            // setTimeout(() => {
+              vm.setStep(1)
+            //   console.log('~~~~~~~~~~~', vm.step)
+            // }, 4000)
+            break
+          case 1: // wolfkill, the vote.length === 3 will continue
+            // setTimeout(() => {
+            //   vm.step = 2
+            //   console.log('~~~~~~~~~~~', vm.step)
+            // }, 4000)
+            break
+          case 2:
+            // setTimeout(() => {
+            //   vm.step = 3
+            //   console.log('~~~~~~~~~~~', vm.step)
+            // }, 4000)
+            break
+          case 3:
+            // setTimeout(() => {
+            //   vm.step = 4
+            //   console.log('~~~~~~~~~~~', vm.step)
+            // }, 4000)
+            break
+          case 4:
+            // setTimeout(() => {
+            //   vm.step = 5
+            // }, 4000)
+            break
+          case 5:
+            // setTimeout(() => {
+              // vm.step = 6
+            // }, 4000)
+            break
+          case 6:
+            // setTimeout(() => {
+            //   vm.step = 7
+            // }, 4000)
+            break
+          case 7:
+            setTimeout(() => {
+              vm.setStep(0)
+              vm.night = false
+            }, 3000)
+            break
+          case 8:
+            // setTimeout(() => {
+            //   vm.step = 1
+            // }, 4000)
+            break
+        }
+      } else {
+        switch (val) {
+           case 0:
+            setTimeout(() => {
+              vm.setStep(2)
+              console.log('~~~~~~~~~~~', vm.step)
+            }, 4000)
+            break
+          case 1:
+
+            break
+          case 2:
+
+            break
+          case 3:
+
+            break
+          case 4:
+
+            break
+          case 5:
+
+            break
+          case 6:
+
+            break
+          case 7:
+
+            break
+          case 8:
+
+            break
+        }
       }
     }
   },
@@ -79,35 +214,38 @@ export default {
 
     this.timer = setInterval(function () {
       vm.getdata()
+    }, 1000)
+    setTimeout(() => {
+      // if (this.player.length > 0) {
+      //   $('.player ul li:nth-child(1)').fadeIn(300, () => {
+      //     $('.player ul li:nth-child(2)').fadeIn(300, () => {
+      //       $('.player ul li:nth-child(3)').fadeIn(300, () => {
+      //         $('.player ul li:nth-child(4)').fadeIn(300, () => {
+      //           $('.player ul li:nth-child(5)').fadeIn(300, () => {
+      //             $('.player ul li:nth-child(6)').fadeIn(300, () => {
+      //               $('.player ul li:nth-child(7)').fadeIn(300, () => {
+      //                 $('.player ul li:nth-child(8)').fadeIn(300, () => {
+      //                   $('.player ul li:nth-child(9)').fadeIn(300, () => {
+      //                     $('.player ul li:nth-child(10)').fadeIn(300, () => {
+      //                     })
+      //                   })
+      //                 })
+      //               })
+      //             })
+      //           })
+      //         })
+      //       })
+      //     })
+      //   })
+      // }
+      vm.setStep(6)
     }, 300)
     setTimeout(() => {
-      if (this.players.length > 0) {
-        $('.player ul li:nth-child(1)').fadeIn(300, () => {
-          $('.player ul li:nth-child(2)').fadeIn(300, () => {
-            $('.player ul li:nth-child(3)').fadeIn(300, () => {
-              $('.player ul li:nth-child(4)').fadeIn(300, () => {
-                $('.player ul li:nth-child(5)').fadeIn(300, () => {
-                  $('.player ul li:nth-child(6)').fadeIn(300, () => {
-                    $('.player ul li:nth-child(7)').fadeIn(300, () => {
-                      $('.player ul li:nth-child(8)').fadeIn(300, () => {
-                        $('.player ul li:nth-child(9)').fadeIn(300, () => {
-                          $('.player ul li:nth-child(10)').fadeIn(300, () => {
-                          })
-                        })
-                      })
-                    })
-                  })
-                })
-              })
-            })
-          })
-        })
-      }
-    }, 300)
-
+      vm.setNightCount(1)
+    })
   },
   methods: {
-    ...mapActions(['setIp', 'setUserName', 'setLogout', 'getData', 'setIdentify', 'setGameOver']),
+    ...mapActions(['setLogout', 'getData', 'setGameOver', 'setVote', 'setStep', 'setNightCount']),
     getdata (data) {
       var vm = this
 
@@ -117,19 +255,44 @@ export default {
         vm.online = res.userName.length
         vm.identify = res.identify
         vm.gameStart = res.gameStart
+        vm.voteRes = res.vote
+        vm.step = res.step
 
         console.log('username', this.memberList)
         console.log('online : ', this.online)
         console.log('player : ', this.player)
         console.log('id : ', this.identify)
+        console.log('vote : ', this.voteRes)
       })
     },
-    vote () {
+    vote (i) {
       if (this.night) {
+        this.setVote(this.player.indexOf(this.loginName), i)
+      } else { // morning
 
       }
     },
+    wolfkill () {
+
+    },
+    eye (i) {
+      let vm = this
+      this.tmpeyesnumber = i
+      if (this.identify[i - 1] === 5) {
+        this.goodman = '狼人'
+      } else {
+        this.goodman = '好人'
+      }
+      $('.eyecheck').fadeIn(300)
+      $('.eyes button').attr('disabled', true)
+
+      setTimeout(() => {
+        // vm.step = 7
+        vm.setStep(7)
+      }, 3000)
+    },
     gameOver () {
+      this.setStep(0)
       this.setGameOver()
       this.closePage()
     },
@@ -149,174 +312,3 @@ export default {
   }
 }
 </script>
-
-
-<style scoped>
-  .game-bg {
-    display: none;
-    height: -webkit-fill-available;
-    width: 100%;
-    background-image: url('../assets/images/background.jpg');
-    background-repeat: no-repeat;
-    /* background-size: cover; */
-    background-size: 100% 100%;
-  }
-  .top {
-    height: 33vw;
-    width: 100%;
-    text-align: center;
-  }
-  .top .word {
-    position: absolute;
-    border-radius: 1vw;
-    font-size: 57px;
-    top: 13vw;
-    left:29vw;
-    color: aliceblue;
-    width: 500px;
-    height: 10vw;
-    vertical-align: middle
-  }
-  .top .identify {
-    float: right;
-    border-radius: 1vw;
-    width: 151px;
-    height: 242px;
-    margin: 25px 25px 0vw 0vw;
-    transform-style:preserve-3d;
-    transition:0.5s all ease;
-    box-shadow:0px 0px 10px rgba(10,10,0.8);
-  }
-  .top .identify:hover {
-  transform:rotateY(180deg);
-  }
-  .top .identify .card-front {
-    position:absolute;
-    /* background-image: url('../assets/images/whokills/people.jpg'); */
-    background-image: url('../assets/images/whokills/cardBack.jpg');
-    background-size: 100% 100%;
-    width: 100%;
-    height: 100%;
-    border-radius: 1vw;
-    backface-visibility:hidden;
-  }
-  .top .identify .card-back {
-    position:absolute;
-    /* background-image: url('../assets/images/whokills/cardBack.jpg'); */
-    /* background-image: url('../assets/images/whokills/1.jpg'); */
-    width: 100%;
-    height: 100%;
-
-    backface-visibility:hidden;
-    transform:rotateY(180deg);
-  }
-  .top .identify .card-back img{
-    width: 100%;
-    height: 100%;
-    border-radius: 1vw;
-  }
-  .player {
-    width: 100%;
-  }
-  .player ul li {
-    display: none;
-    position: absolute;
-    bottom: 10px;
-    width:9%;
-    height: 135px;
-    border-top-left-radius: 4vw;
-    border-top-right-radius: 4vw;
-    border-bottom-left-radius: 1vw;
-    border-bottom-right-radius: 1vw;
-    background-image: linear-gradient(57deg,#030011,#010046 51%,#966100);
-    /* transform:scale(1,1); */
-    transition: all .3s cubic-bezier(0.39, 0.58, 0.57, 1);
-    box-shadow:0px 0px 10px rgba(10,10,0.8);
-  }
-  .player ul li:hover {
-    transform:scale(1.15,1.15);
-    z-index: 7
-  }
-  .player ul li div{
-    width: 100%;
-    /* text-align: center; */
-    color: rgb(255, 235, 205);
-    height: 100%;
-    padding-top: 3vw;
-    font-weight: 700
-  }
-  .player ul li div span{
-    position: absolute;
-
-    top: -1.5vw;
-    margin: 0vw auto;
-  }
-  .player ul li div p{
-    position: inherit;
-    width: fit-content;
-    margin: 0vw auto;
-    bottom: 0vw;
-  }
-  .player ul :last-child {
-    right:5vw;
-    z-index: 5;
-    bottom: 5vw
-  }
-  .player ul :nth-child(1) {
-    left:5vw;
-    z-index: 5;
-    bottom: 5vw
-  }
-  .player ul :nth-child(2) {
-    left: 12vw;;
-    bottom: 10vw;
-    z-index: 4
-  }
-  .player ul :nth-child(3) {
-    left: 21vw;
-    bottom: 13vw
-  }
-  .player ul :nth-child(4) {
-    left: 31vw;
-    bottom: 15vw
-
-  }
-  .player ul :nth-child(5) {
-    left: 41vw;
-    bottom: 17vw
-  }
-  .player ul :nth-child(6) {
-    left: 52vw;
-    bottom: 17vw
-  }
-  .player ul :nth-child(7) {
-    left: 62vw;
-    bottom: 15vw
-  }
-  .player ul :nth-child(8) {
-    left: 72vw;
-    bottom: 13vw
-  }
-  .player ul :nth-child(9) {
-    left: 80vw;
-    bottom: 10vw
-  }
-  .pass-bt {
-    position: absolute;
-    bottom: 5vw;
-    left: 45vw
-  }
-  .pass-bt button {
-    height: auto;
-    font-size: 3vw;
-    background: #08002e
-  }
-  .night {
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 3;
-    background-color: rgb(0, 0, 0, .7)
-  }
-</style>

@@ -9,6 +9,9 @@ const state = {
   online: 0,
   gameStart: store.get('gameStart') !== undefined ? store.get('gameStart') : false,
   night: store.get('night') !== undefined ? store.get('night') : false,
+  step: store.get('step') !== undefined ? store.get('step') : 0, // include morning and night
+  vote: store.get('vote') !== undefined ? store.get('vote') : [],
+  nightCount: store.get('nightCount') !== undefined ? store.get('nightCount') : 0,
   OGMode: [1, 1, 1, 1, 2, 3, 4, 5, 5, 5] // 1平民 2女巫 3預言家 4獵人 5狼
 }
 
@@ -19,9 +22,6 @@ const mutations = {
   [types.SET_IDENTIFY] (state, payload) {
     state.identify = payload
   },
-  // [types.SET_IP] (state, payload) {
-  //   state.ip.push(payload)
-  // },
   [types.SET_USERNAME] (state, payload) {
     state.userName.push(payload)
     state.online = state.userName.length
@@ -43,6 +43,18 @@ const mutations = {
   },
   [types.SET_SORTPLAYER] (state, payload) {
     state.player = payload
+  },
+  [types.SET_NIGHT] (state, payload) {
+    state.night = payload
+  },
+  [types.SET_NIGHTCOUNT] (state, payload) {
+    state.nightCount = payload
+  },
+  [types.SET_STEP] (state, payload) {
+    state.step = payload
+  },
+  [types.SET_VOTE] (state, payload) {
+    state.vote = payload
   },
   [types.SET_GAMEOVER] (state) {
     state.player = []

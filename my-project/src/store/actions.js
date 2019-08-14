@@ -8,10 +8,6 @@ export const setUserName = ({ commit }, value) => {
   store.set('userName', array)
   commit(types.SET_USERNAME, value)
 }
-export const setIdentify = ({ commit }, value) => {
-  store.set('identify', value)
-  commit(types.SET_IDENTIFY, value)
-}
 export const setPlayer = ({ commit }, value) => {
   let array = store.get('player') !== undefined ? store.get('player') : []
   array.push(value)
@@ -28,16 +24,32 @@ export const setPopPlayer = ({ commit }, value) => {
   store.set('player', array)
   commit(types.SET_POPPLAYER, value)
 }
-// export const setModel = ({ commit }, value) => {
-//   let array = store.get(value)
-//   store.set(value, array)
-//   commit(types.SET_PLAYER, value)
-// }
+export const setIdentify = ({ commit }, value) => {
+  store.set('identify', value)
+  commit(types.SET_IDENTIFY, value)
+}
+export const setNight = ({ commit }, value) => {
+  store.set('night', value)
+  commit(types.SET_NIGHT, value)
+}
+export const setNightCount = ({ commit }, value) => {
+  store.set('nightCount', value)
+  commit(types.SET_NIGHTCOUNT, value)
+}
+export const setStep = ({ commit }, value) => {
+  store.set('step', value)
+  commit(types.SET_STEP, value)
+}
+export const setVote = ({ commit }, player, value) => {
+  let array = store.get('vote') !== undefined ? store.get('vote') : []
+  array[player] = value
+  store.set('vote', array)
+  commit(types.SET_VOTE, array)
+}
 export const setLogout = ({ commit }, value) => {
   let us = store.get('userName')
   us.splice(value, 1)
   store.set('userName', us)
-
   commit(types.SET_LOGOUT, value)
 }
 export const setGameStart = ({ commit }) => {
@@ -55,7 +67,10 @@ export const getData = ({ commit }) => {
     userName: store.get('userName'),
     player: store.get('player') !== undefined ? store.get('player') : [],
     identify: store.get('identify') !== undefined ? store.get('identify') : [],
-    gameStart: store.get('gameStart') !== undefined ? store.get('gameStart') : false
+    gameStart: store.get('gameStart') !== undefined ? store.get('gameStart') : false,
+    night: store.get('night') !== undefined ? store.get('night') : false,
+    nightCount: store.get('nightCount') !== undefined ? store.get('nightCount') : false,
+    step: store.get('step') !== undefined ? store.get('step') : 0
   }
   return data
 }
