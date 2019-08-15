@@ -12,6 +12,7 @@ const state = {
   step: store.get('step') !== undefined ? store.get('step') : 0, // include morning and night
   vote: store.get('vote') !== undefined ? store.get('vote') : [],
   nightCount: store.get('nightCount') !== undefined ? store.get('nightCount') : 0,
+  killed: store.get('killed') !== undefined ? store.get('killed') : [],
   OGMode: [1, 1, 1, 1, 2, 3, 4, 5, 5, 5] // 1平民 2女巫 3預言家 4獵人 5狼
 }
 
@@ -55,6 +56,9 @@ const mutations = {
   },
   [types.SET_VOTE] (state, payload) {
     state.vote = payload
+  },
+  [types.SET_KILLED] (state, payload) {
+    state.killed = payload
   },
   [types.SET_GAMEOVER] (state) {
     state.player = []

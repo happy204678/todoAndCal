@@ -7,7 +7,7 @@
       <div class="word" v-if="!night">
         <span v-if="nightCount === 0">請確認自己的身分...</span>
 
-        <span v-if="step === 0">天亮請睜眼。昨晚{{}}號被殺死了。<br>死者請至淘汰區。</span>
+        <span v-if="step === 0">天亮請睜眼。昨晚{{killed[0] + 1}}號被殺死了。<br>死者請至淘汰區。</span>
         <span v-if="step === 1">請發表遺言。</span>
         <span v-if="step === 2 && player[1].length > 0">1號發言...</span>
         <span v-if="step === 3 && player[2].length > 0">2號發言...</span>
@@ -24,7 +24,7 @@
       <div class="identify" v-if="player.includes(loginName)">
         <div class="card-front"></div>
         <div class="card-back">
-          <imgv-if="identify.length > 0" :src="'/static/image/whokills/id' + identify[player.indexOf(loginName)] + '.jpg'"/>
+          <img v-if="identify.length > 0" :src="'/static/image/whokills/id' + identify[player.indexOf(loginName)] + '.jpg'"/>
         </div>
       </div>
     </div>
@@ -39,9 +39,10 @@
       </ul>
     </div>
     <div class="pass-bt">
-      <button v-if="!night && step <= 11 && step >=2" @click="nextstep" >結束發言</button>
+      <button v-if="!night && step <= 11 && step >=2" @click="nextstep()" >結束發言</button>
     </div>
     <div class="night" v-if="night">
+      <span v-if="step === 0">天黑請閉眼。</span>
       <span v-if="step === 1">狼人現身請睜眼，請選擇要殺害的對象。</span>
       <span v-if="step === 2">狼人請閉眼。</span>
       <span v-if="step === 3">女巫請睜眼，他被殺死了，你要救他嗎？</span>
@@ -52,12 +53,13 @@
 
       <div class="wolfvote nightAction" v-if="(step === 1) && identify[player.indexOf(loginName)] === 5">
         <div v-for="(play, index) in player.filter(id => identify[player.indexOf(id)] === 5)" :key="index">
-          <p>{{play}}選擇殺{{killed}}</p>
+          <p :class="{red:(voteRes[player.indexOf(play)] !== undefined)}">{{play}}選擇殺<a v-if="voteRes[player.indexOf(play)] !== undefined">{{voteRes[player.indexOf(play)] + 1}}</a></p>
         </div>
-        <div class="selectnumber">
+        <div class="selectnumber" v-if="!decided">
           <button v-for="i in 10" :key="i" @click="vote(i)">{{i}}號</button>
         </div>
-        <button>確定</button>
+        <!-- <button @click="decideKill()" :disabled="decided && (voteRes[player.indexOf(loginName)] !== null)">確定</button> -->
+        <span v-if="killed">...殺掉{{killed + 1}}號了</span>
       </div>
 
       <div class="witch nightAction" v-if="(step === 3 || step === 4) && identify[player.indexOf(loginName)] === 2">
@@ -95,11 +97,13 @@ export default {
       step: Number,
       button: '',
       voteNum: Number,
-      killed: 1,
+      killed: Number,
       voteRes: [],
       tmpeyesnumber: Number,
       goodman: '',
-      nightCount: Number
+      nightCount: Number,
+      P1listenVote: '',
+      decided: false
     }
   },
   watch: {
@@ -115,43 +119,34 @@ export default {
       if (this.night) {
         switch (val) {
           case 0:
-            // setTimeout(() => {
+            setTimeout(() => {
               vm.setStep(1)
-            //   console.log('~~~~~~~~~~~', vm.step)
-            // }, 4000)
+            }, 4000)
             break
           case 1: // wolfkill, the vote.length === 3 will continue
-            // setTimeout(() => {
-            //   vm.step = 2
-            //   console.log('~~~~~~~~~~~', vm.step)
-            // }, 4000)
             break
           case 2:
-            // setTimeout(() => {
-            //   vm.step = 3
-            //   console.log('~~~~~~~~~~~', vm.step)
-            // }, 4000)
+            setTimeout(() => {
+              vm.setStep(3)
+            }, 3000)
             break
           case 3:
-            // setTimeout(() => {
-            //   vm.step = 4
-            //   console.log('~~~~~~~~~~~', vm.step)
-            // }, 4000)
+            setTimeout(() => { // witch save
+              vm.setStep(4)
+            }, 3000)
             break
           case 4:
-            // setTimeout(() => {
-            //   vm.step = 5
-            // }, 4000)
+            setTimeout(() => { // witch poison
+              vm.setStep(5)
+            }, 4000)
             break
           case 5:
-            // setTimeout(() => {
-              // vm.step = 6
-            // }, 4000)
+            setTimeout(() => {
+              vm.setStep(6)
+            }, 4000)
             break
           case 6:
-            // setTimeout(() => {
-            //   vm.step = 7
-            // }, 4000)
+            // eyes see
             break
           case 7:
             setTimeout(() => {
@@ -168,11 +163,14 @@ export default {
       } else {
         switch (val) {
            case 0:
+            // if () { // 有遺言
+
+            // }
             setTimeout(() => {
               vm.setStep(2)
               console.log('~~~~~~~~~~~', vm.step)
             }, 4000)
-            break
+              break
           case 1:
 
             break
@@ -199,6 +197,11 @@ export default {
             break
         }
       }
+    },
+    P1listenVote (val) {
+      if (this.player[0] === this.loginName) {
+
+      }
     }
   },
   mounted () {
@@ -210,7 +213,6 @@ export default {
     }
 
     $('.game-bg').fadeIn(1000)
-
 
     this.timer = setInterval(function () {
       vm.getdata()
@@ -238,14 +240,14 @@ export default {
       //     })
       //   })
       // }
-      vm.setStep(6)
+      vm.setStep(0)
     }, 300)
     setTimeout(() => {
       vm.setNightCount(1)
     })
   },
   methods: {
-    ...mapActions(['setLogout', 'getData', 'setGameOver', 'setVote', 'setStep', 'setNightCount']),
+    ...mapActions(['setLogout', 'getData', 'setGameOver', 'setVote', 'setStep', 'setNightCount', 'setKilled']),
     getdata (data) {
       var vm = this
 
@@ -257,23 +259,69 @@ export default {
         vm.gameStart = res.gameStart
         vm.voteRes = res.vote
         vm.step = res.step
+        vm.killed = res.killed
 
         console.log('username', this.memberList)
         console.log('online : ', this.online)
         console.log('player : ', this.player)
         console.log('id : ', this.identify)
         console.log('vote : ', this.voteRes)
+        console.log('killed', this.killed)
       })
     },
     vote (i) {
+      var vm = this
       if (this.night) {
-        this.setVote(this.player.indexOf(this.loginName), i)
+        let obj = {
+          player: this.player.indexOf(this.loginName),
+          value: i - 1
+        }
+        this.setVote(obj)
+        this.decided = true
+
+        setTimeout(() => { // 等資料到
+
+          let killedList = vm.voteRes.filter(num => num !== null) // [1,2,3]
+
+          if (killedList.length === 3) { // 3人都投才進行
+            let repeat = killedList.filter((e,i,a) => { return a.indexOf(e) !== i }) // 找出重複 []
+
+            if (repeat !== []) { // 多數決
+              vm.setKilled(repeat[0])
+              console.log('123123123123123123123', repeat[0])
+            } else { // 平票，3取一殺
+              let result = killedList.filter((e,i,a) => { return a.indexOf(e) === i }) // 不重複 [1,2,3]
+              vm.setKilled(vm.shuffle(result)[0]) // 洗牌後 殺第一個
+            }
+
+            obj.value = 99
+            vm.setVote(obj)
+            vm.setStep(3)
+          }
+        }, 1100)
+
+
       } else { // morning
 
       }
     },
-    wolfkill () {
+    decideKill () {
+      // push the killed person, then p1 watch the state, do func
+      let killedList = this.voteRes.filter(num => num !== null) // [1,2,3]
+      this.decided =true
+      if (killedList.length === 3) { // 3人都投才進行
+        let repeat = killedList.filter((e,i,a) => { return a.indexOf(e) !== i }) // 找出重複 []
 
+        if (repeat !== []) { // 多數決
+          this.setKilled(repeat[0])
+        } else { // 平票，3取一殺
+          let result = killedList.filter((e,i,a) => { return a.indexOf(e) === i }) // 不重複 [1,2,3]
+          this.setKilled(this.shuffle(result)[0]) // 洗牌後 殺第一個
+        }
+        setTimeout(() => {
+          this.setStep(3)
+        }, 3000)
+      }
     },
     eye (i) {
       let vm = this
@@ -290,6 +338,21 @@ export default {
         // vm.step = 7
         vm.setStep(7)
       }, 3000)
+    },
+    nextstep () {
+
+    },
+    shuffle (arr) {
+      let len = arr.length;
+
+      while (len) {
+        let i = (Math.random() * len--) >> 0
+        // 交换位置
+        let temp = arr[len]
+        arr[len] = arr[i]
+        arr[i] = temp
+      }
+      return arr
     },
     gameOver () {
       this.setStep(0)

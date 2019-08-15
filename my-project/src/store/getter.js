@@ -8,3 +8,4 @@ export const night = state => { return state.night }
 export const nightCount = state => { return state.nightCount }
 export const step = state => { return state.step }
 export const vote = state => { return state.vote }
+export const killed = state => { return state.killed }

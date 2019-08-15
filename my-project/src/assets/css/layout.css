@@ -267,7 +267,7 @@ div {
   }
   .hall .carddisplay img:nth-child(6):hover {
     z-index: 10;
-    top: 35px;
+    top: 30px;
   }
   .hall .carddisplay img:nth-child(7){
     right: 50px
@@ -470,23 +470,23 @@ div {
     position: absolute;
     width: 850px;
     text-align: center;
-    top: 10%;
+    top: 5%;
     left: 25%;
     color: white;
     font-size: 58px;
   }
   .wolfvote div {
     position: absolute;
-    left: 20%;
-    top: 15%;
+    left: 25%;
+    top: 20%;
     color: white;
-    font-size: 58px;
+    font-size: 35px;
   }
   .wolfvote div:nth-child(2){
-    left: 40%;
+    left: 45%;
   }
   .wolfvote div:nth-child(3){
-    left: 60%;
+    left: 65%;
   }
   .wolfvote>button {
     position: absolute;

@@ -40,11 +40,29 @@ export const setStep = ({ commit }, value) => {
   store.set('step', value)
   commit(types.SET_STEP, value)
 }
-export const setVote = ({ commit }, player, value) => {
-  let array = store.get('vote') !== undefined ? store.get('vote') : []
-  array[player] = value
-  store.set('vote', array)
-  commit(types.SET_VOTE, array)
+export const setVote = ({ commit }, obj) => {
+  if (obj.value === 99) {
+    let array = []
+    store.set('vote', array)
+    commit(types.SET_VOTE, array)
+  } else {
+    let array = store.get('vote') !== undefined ? store.get('vote') : []
+    array[obj.player] = obj.value
+    store.set('vote', array)
+    commit(types.SET_VOTE, array)
+  }
+}
+export const setKilled = ({ commit }, value) => {
+  if (value === 99) {
+    let array = []
+    store.set('killed', array)
+    commit(types.SET_KILLED, array)
+  } else {
+    let array = store.get('killed') !== undefined ? store.get('killed') : []
+    array.push(value)
+    store.set('killed', array)
+    commit(types.SET_KILLED, array)
+  }
 }
 export const setLogout = ({ commit }, value) => {
   let us = store.get('userName')
@@ -59,6 +77,8 @@ export const setGameStart = ({ commit }) => {
 export const setGameOver = ({ commit }) => {
   store.set('player', [])
   store.set('gameStart', false)
+  store.set('vote', [])
+  store.set('killed', [])
   commit(types.SET_GAMEOVER)
 }
 export const getData = ({ commit }) => {
@@ -70,7 +90,9 @@ export const getData = ({ commit }) => {
     gameStart: store.get('gameStart') !== undefined ? store.get('gameStart') : false,
     night: store.get('night') !== undefined ? store.get('night') : false,
     nightCount: store.get('nightCount') !== undefined ? store.get('nightCount') : false,
-    step: store.get('step') !== undefined ? store.get('step') : 0
+    step: store.get('step') !== undefined ? store.get('step') : 0,
+    vote: store.get('vote') !== undefined ? store.get('vote') : [],
+    killed: store.get('killed') !== undefined ? store.get('killed') : []
   }
   return data
 }

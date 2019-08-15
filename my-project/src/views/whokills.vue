@@ -1,19 +1,8 @@
 <template>
   <div class="hall">
-    <!-- <div class="topdiv">
-      <h1>狼人殺</h1>
-      <div class="joinMemberList">
-        <h3>人員列表</h3>
-        <ul v-if="memberList.length > 0">
-          <li v-for="(member, index) in memberList" :key="index" :class="{'red': member === loginName}"><span>{{member}}</span><span v-if="playGame[memberList.indexOf(member)]"><-- 準備</span></li>
-        </ul>
-        <span class="countPoeple">{{memberList.length}}人</span>
-      </div>
-      <button @click="notready()">觀戰</button>
-    </div> -->
     <div class="readymember floatl">
       <h1>狼人殺</h1>
-      <button v-if="player.indexOf(loginName) === 0" @click="startGame" :disabled="disabled">開始遊戲</button>
+      <button @click="startGame" :disabled="disabled">開始遊戲</button> <!-- v-if="player.indexOf(loginName) === 0" -->
     </div>
     <div class="member floatr">
       <h3>人員列表</h3>
