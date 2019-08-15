@@ -5,21 +5,22 @@
         <button @click="gameOver()" style="z-index: 100">結束遊戲</button>
       </div>
       <div class="word" v-if="!night">
-        <span v-if="nightCount === 0">請確認自己的身分...</span>
+        <span v-if="step === 99">請確認自己的身分...</span>
 
         <span v-if="step === 0">天亮請睜眼。昨晚{{killed[0] + 1}}號被殺死了。<br>死者請至淘汰區。</span>
         <span v-if="step === 1">請發表遺言。</span>
-        <span v-if="step === 2 && player[1].length > 0">1號發言...</span>
-        <span v-if="step === 3 && player[2].length > 0">2號發言...</span>
-        <span v-if="step === 4 && player[3].length > 0">3號發言...</span>
-        <span v-if="step === 5 && player[4].length > 0">4號發言...</span>
-        <span v-if="step === 6 && player[5].length > 0">5號發言...</span>
-        <span v-if="step === 7 && player[6].length > 0">6號發言...</span>
-        <span v-if="step === 8 && player[7].length > 0">7號發言...</span>
-        <span v-if="step === 9 && player[8].length > 0">8號發言...</span>
-        <span v-if="step === 10 && player[9].length > 0">9號發言...</span>
-        <span v-if="step === 11 && player[10].length > 0">10號發言...</span>
+        <span v-if="step === 2 && player[0].length > 0">1號發言...</span>
+        <span v-if="step === 3 && player[1].length > 0">2號發言...</span>
+        <span v-if="step === 4 && player[2].length > 0">3號發言...</span>
+        <span v-if="step === 5 && player[3].length > 0">4號發言...</span>
+        <span v-if="step === 6 && player[4].length > 0">5號發言...</span>
+        <span v-if="step === 7 && player[5].length > 0">6號發言...</span>
+        <span v-if="step === 8 && player[6].length > 0">7號發言...</span>
+        <span v-if="step === 9 && player[7].length > 0">8號發言...</span>
+        <span v-if="step === 10 && player[8].length > 0">9號發言...</span>
+        <span v-if="step === 11 && player[9].length > 0">10號發言...</span>
         <span v-if="step === 12">請選擇您要投票的人。</span>
+
       </div>
       <div class="identify" v-if="player.includes(loginName)">
         <div class="card-front"></div>
@@ -39,7 +40,7 @@
       </ul>
     </div>
     <div class="pass-bt">
-      <button v-if="!night && step <= 11 && step >=2" @click="nextstep()" >結束發言</button>
+      <button v-if="!night && step <= 11 && step >= 2" @click="nextstep()" >結束發言</button>
     </div>
     <div class="night" v-if="night">
       <span v-if="step === 0">天黑請閉眼。</span>
@@ -53,17 +54,22 @@
 
       <div class="wolfvote nightAction" v-if="(step === 1) && identify[player.indexOf(loginName)] === 5">
         <div v-for="(play, index) in player.filter(id => identify[player.indexOf(id)] === 5)" :key="index">
-          <p :class="{red:(voteRes[player.indexOf(play)] !== undefined)}">{{play}}選擇殺<a v-if="voteRes[player.indexOf(play)] !== undefined">{{voteRes[player.indexOf(play)] + 1}}</a></p>
+          <p :class="{red:(voteRes[player.indexOf(play)] !== null && voteRes[player.indexOf(play)] !== undefined)}">{{play}}選擇殺<a v-if="voteRes[player.indexOf(play)] !== null && voteRes[player.indexOf(play)] !== undefined">{{voteRes[player.indexOf(play)] + 1}}</a></p>
         </div>
         <div class="selectnumber" v-if="!decided">
           <button v-for="i in 10" :key="i" @click="vote(i)">{{i}}號</button>
         </div>
         <!-- <button @click="decideKill()" :disabled="decided && (voteRes[player.indexOf(loginName)] !== null)">確定</button> -->
-        <span v-if="killed" class="red">...{{killed[0] + 1}}號被殺掉了</span>
+        <span v-if="killed.length >= 0" class="red">...{{killed[0] + 1}}號被殺掉了</span>
       </div>
 
       <div class="witch nightAction" v-if="(step === 3 || step === 4) && identify[player.indexOf(loginName)] === 2">
-
+        <span class="red">{{killed[0] + 1}}號被殺了</span>
+        <div>
+          <img @click="save()" src="/static/image/whokills/id9.jpg"/>
+          <img @click="poison()" src="/static/image/whokills/id10.jpg"/>
+        </div>
+        <button @click="noSavePoison()">都不要</button>
       </div>
       <div class="eyes nightAction" v-if="(step === 6) && identify[player.indexOf(loginName)] === 3">
         <div class="selectnumber">
@@ -118,6 +124,12 @@ export default {
 
       if (this.night) {
         switch (val) {
+          case 99:
+            setTimeout(() => {
+              vm.setNight(true)
+              vm.setStep(0)
+            }, 4000)
+            break
           case 0:
             setTimeout(() => {
               vm.setStep(1)
@@ -133,12 +145,10 @@ export default {
           case 3:
             setTimeout(() => { // witch save
               vm.setStep(4)
-            }, 3000)
+            }, 4000)
             break
           case 4:
-            setTimeout(() => { // witch poison
-              vm.setStep(5)
-            }, 4000)
+
             break
           case 5:
             setTimeout(() => {
@@ -151,18 +161,19 @@ export default {
           case 7:
             setTimeout(() => {
               vm.setStep(0)
-              vm.night = false
+              vm.setNight(false)
             }, 3000)
-            break
-          case 8:
-            // setTimeout(() => {
-            //   vm.step = 1
-            // }, 4000)
             break
         }
       } else {
         switch (val) {
-           case 0:
+          case 99:
+            setTimeout(() => {
+              vm.setNight(true)
+              vm.setStep(0)
+            }, 4000)
+            break
+          case 0:
             // if () { // 有遺言
 
             // }
@@ -194,6 +205,12 @@ export default {
             break
           case 8:
 
+            break
+          case 12:
+            vm.setNight(true)
+            vm.setStep(0)
+            vm.setVote(99)
+            vm.setKilled(99)
             break
         }
       }
@@ -240,14 +257,15 @@ export default {
       //     })
       //   })
       // }
-      vm.setStep(0)
+
     }, 300)
     setTimeout(() => {
       vm.setNightCount(1)
     })
+
   },
   methods: {
-    ...mapActions(['setLogout', 'getData', 'setGameOver', 'setVote', 'setStep', 'setNightCount', 'setKilled']),
+    ...mapActions(['setLogout', 'getData', 'setGameOver', 'setVote', 'setStep', 'setNightCount', 'setKilled', 'setNight']),
     getdata (data) {
       var vm = this
 
@@ -260,6 +278,7 @@ export default {
         vm.voteRes = res.vote
         vm.step = res.step
         vm.killed = res.killed
+        vm.night = res.night
 
         console.log('username', this.memberList)
         console.log('online : ', this.online)
@@ -267,13 +286,15 @@ export default {
         console.log('id : ', this.identify)
         console.log('vote : ', this.voteRes)
         console.log('killed', this.killed)
+        console.log('step', this.step)
+        console.log('night', this.night)
       })
     },
     vote (i) {
       var vm = this
       if (this.night) {
         let obj = {
-          player: this.player.indexOf(this.loginName),
+          player: this.player.indexOf(vm.loginName),
           value: i - 1
         }
         this.setVote(obj)
@@ -288,15 +309,14 @@ export default {
 
             if (repeat !== []) { // 多數決
               vm.setKilled(repeat[0])
-              console.log('123123123123123123123', repeat[0])
             } else { // 平票，3取一殺
               let result = killedList.filter((e,i,a) => { return a.indexOf(e) === i }) // 不重複 [1,2,3]
               vm.setKilled(vm.shuffle(result)[0]) // 洗牌後 殺第一個
             }
 
-            obj.value = 99
-            vm.setVote(obj)
-            vm.setStep(3)
+            // obj.value = 99
+            // vm.setVote(obj)
+            vm.setStep(2)
           }
         }, 1100)
 
@@ -319,9 +339,18 @@ export default {
           this.setKilled(this.shuffle(result)[0]) // 洗牌後 殺第一個
         }
         setTimeout(() => {
-          this.setStep(3)
-        }, 3000)
+          this.setStep(2)
+        }, 5000)
       }
+    },
+    save() {
+      this.setStep(5)
+    },
+    poison () {
+      this.setStep(5)
+    },
+    noSavePoison () {
+      this.setStep(5)
     },
     eye (i) {
       let vm = this
@@ -339,8 +368,8 @@ export default {
         vm.setStep(7)
       }, 3000)
     },
-    nextstep () {
-
+    nextstep (i) {
+      this.setStep(this.step + 1)
     },
     shuffle (arr) {
       let len = arr.length;

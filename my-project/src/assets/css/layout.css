@@ -512,6 +512,36 @@ div {
     top: 40% !important;
     left: 25% !important;
   }
+  .witch div {
+    width: 40%;
+    position: absolute;
+    left: 32%;
+    top: 35%;
+  }
+  .witch span {
+    top: 20%
+  }
+  .witch div img:nth-child(1) {
+    margin-right: 100px;
+    width: 140px;
+  }
+  .witch div img:nth-child(2) {
+    width: 140px;
+    float: right
+  }
+  .witch button {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+  }
+  .witch img {
+    transition:0.5s all ease;
+    border-radius: 4px
+  }
+  .witch img:hover {
+    transform:scale(1.15,1.15);
+  }
+
 
   ::-webkit-scrollbar {
     width:5px;

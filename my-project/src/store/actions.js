@@ -80,6 +80,8 @@ export const setGameOver = ({ commit }) => {
   store.set('gameStart', false)
   store.set('vote', [])
   store.set('killed', [])
+  store.set('night', false)
+  store.set('step', 99)
   commit(types.SET_GAMEOVER)
 }
 export const getData = ({ commit }) => {
