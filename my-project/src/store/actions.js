@@ -75,6 +75,7 @@ export const setGameStart = ({ commit }) => {
   commit(types.SET_GAMESTART)
 }
 export const setGameOver = ({ commit }) => {
+  store.set('userName', [])
   store.set('player', [])
   store.set('gameStart', false)
   store.set('vote', [])

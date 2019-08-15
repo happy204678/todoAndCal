@@ -59,7 +59,7 @@
           <button v-for="i in 10" :key="i" @click="vote(i)">{{i}}號</button>
         </div>
         <!-- <button @click="decideKill()" :disabled="decided && (voteRes[player.indexOf(loginName)] !== null)">確定</button> -->
-        <span v-if="killed">...殺掉{{killed + 1}}號了</span>
+        <span v-if="killed" class="red">...{{killed[0] + 1}}號被殺掉了</span>
       </div>
 
       <div class="witch nightAction" v-if="(step === 3 || step === 4) && identify[player.indexOf(loginName)] === 2">

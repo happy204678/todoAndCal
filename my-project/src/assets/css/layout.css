@@ -482,6 +482,9 @@ div {
     color: white;
     font-size: 35px;
   }
+  .wolfvote span {
+    top: 40%
+  }
   .wolfvote div:nth-child(2){
     left: 45%;
   }
@@ -529,7 +532,7 @@ div {
   }
 
   .red {
-    color: #ff0000;
+    color: #ff0000 !important;
     font-weight: bolder;
   }
   .light {
