@@ -308,6 +308,12 @@ div {
     width: 100%;
     text-align: center;
   }
+  .top > span {
+    color: #5a5a5a;
+    float: left;
+    font-size: 5vw;
+    font-weight: 900
+  }
   .top button {
     position: absolute;
     top: 0px;
@@ -322,6 +328,8 @@ div {
     width: 850px;
     text-align: center
   }
+
+
   .top .identify {
     position: absolute;
     z-index: 100;
@@ -512,7 +520,7 @@ div {
     top: 40% !important;
     left: 25% !important;
   }
-  .witch div {
+  .witch .witchCard {
     width: 40%;
     position: absolute;
     left: 32%;
@@ -521,27 +529,31 @@ div {
   .witch span {
     top: 20%
   }
-  .witch div img:nth-child(1) {
-    margin-right: 100px;
+  .witch .witchCard img:nth-child(1) {
     width: 140px;
   }
-  .witch div img:nth-child(2) {
+  .witch .witchCard img:nth-child(2) {
     width: 140px;
     float: right
   }
-  .witch button {
+  .witch>button {
     position: absolute;
     top: 45%;
     left: 50%;
   }
   .witch img {
-    transition:0.5s all ease;
+    transition:0.15s all ease;
     border-radius: 4px
   }
   .witch img:hover {
     transform:scale(1.15,1.15);
   }
-
+  .witch .poison-btn {
+    display: none;
+    position: absolute;
+    top: 60%;
+    left: 55%;
+  }
 
   ::-webkit-scrollbar {
     width:5px;
@@ -567,6 +579,12 @@ div {
   }
   .light {
     background-image: linear-gradient(57deg,#030011,#010046 0%,#966100) !important;
+  }
+  .displaynone {
+    display: none
+  }
+  .displayunset {
+    display: unset !important;
   }
 
 @media screen and (max-width: 600px){
