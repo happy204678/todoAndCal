@@ -12,6 +12,9 @@
         <span v-if="step === 0 && killed.length > 0">天亮請睜眼。昨晚<span class="red" v-for="kill in killed" :key="kill">{{kill + 1}}號</span>被殺死了。</span>
         <span v-if="step === 0 && killed.length === 0">天亮請睜眼。昨晚是平安夜。</span>
         <span v-if="step === 1 && nightCount === 0">{{ killed[0] + 1 }}號請發表遺言。</span>
+        <div class="selectnumber" v-if="step === 1 && nightCount === 0 && identify[player[killed[0]]] === 4">
+          <button v-for="i in 10" :key="i" v-if="player[i] !== ''" @click="hunterShot(i - 1)">{{ i }}</button> <!-- player.indexOf(loginName) === killed[0] && !witchPoisonHunter-->
+        </div>
         <span v-if="step === 2 && player[0] !== ''">1號開始發言...</span>
         <span v-if="step === 3 && player[1] !== ''">2號發言...</span>
         <span v-if="step === 4 && player[2] !== ''">3號發言...</span>
@@ -47,7 +50,7 @@
 
         <span v-if="step === 24">平票，進入夜晚。</span>
         <span v-if="step === 25">沒人投票，進入夜晚。</span>
-
+        <span v-if="step === 26">{{killed[0]}}號是獵人，他要帶走{{playerWhoshoted}}。</span>
       </div>
       <div class="identify" v-if="player.includes(loginName)">
         <div class="card-front"></div>
@@ -144,7 +147,10 @@ export default {
       P1listenVote: '',
       decided: false,
       even: 0,
-      firstlastword: true
+      firstlastword: true,
+      witchPoisonHunter: false,
+      playerWhoshoted: Number,
+      tmpStepByHunterShot: Number
     }
   },
   watch: {
@@ -327,6 +333,10 @@ export default {
               vm.even = 0
             }, 3000)
             break
+          case 26:
+             setTimeout(() => {
+              vm.setStep(this.tmpStepByHunterShot)
+            }, 4000)
           case 40: // even, talk first
           case 41: // second ...
           case 42:
@@ -465,12 +475,13 @@ export default {
           let killedList = vm.voteRes.filter(num => num !== null) // [1,2,3]
           let wolfCount = 0
           for (let j = 0; j < vm.player.length; j++) {
-            if (vm.player[j] !== '' && vm.identify[vm.player[j]] === 5) {
-              wolf
+            if (vm.player[j] !== '' && vm.identify[j] === 5) {
+              wolfCount++
             }
           }
-          if (killedList.length === 3) { // 3人都投才進行
+          if (killedList.length === wolfCount) { // 3人都投才進行
             let result = vm.ana(killedList)
+            console.log(result[0])
             if (result.length === 1) { // 多數決
               vm.setKilled(result[0])
             } else { // 平票，3取一殺
@@ -521,6 +532,9 @@ export default {
     },
     poison (player) {
       this.setKilled(player)
+      if (this.identify[player] === 5) {
+        this.witchPoisonHunter = true
+      }
       this.setStep(5)
     },
     noSaveOrPoison () {
@@ -542,6 +556,12 @@ export default {
         vm.setStep(7)
       }, 3000)
     },
+    hunterShot (player) {
+      this.setDieOut(player)
+      this.playerWhoshoted = player + 1
+      this.tmpStepByHunterShot = this.step
+      this.setStep(26)
+    },
     nextstep () {
       // should check die or not
       switch (this.step) {
@@ -549,7 +569,7 @@ export default {
           if (this.killed.length > 1) {
             if (this.firstlastword) {
               this.setDieOut(this.killed[0])
-              this.setKilled(1) // shift
+              this.setKilled(50) // shift
               this.firstlastword = false
             } else {
               this.setDieOut(this.killed[0])

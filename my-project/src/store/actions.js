@@ -70,7 +70,7 @@ export const setKilled = ({ commit }, value) => {
     let array = []
     store.set('killed', array)
     commit(types.SET_KILLED, array)
-  } else if (value === 1) {
+  } else if (value === 50) {
     let array = store.get('killed') !== undefined ? store.get('killed') : []
     array.shift()
     store.set('killed', array)
