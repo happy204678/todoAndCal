@@ -578,7 +578,7 @@ div {
     font-weight: bolder;
   }
   .light {
-    background-image: linear-gradient(57deg,#030011,#010046 0%,#966100) !important;
+    background-image: linear-gradient(57deg,#ffffff,#000000 0%,#ff9900) !important;
   }
   .displaynone {
     display: none

@@ -9,44 +9,44 @@
       <div class="word" v-if="!night">
         <span v-if="step === 99">請確認自己的身分...</span>
 
-        <span v-if="step === 0 && killed.length > 0">天亮請睜眼。昨晚<span class="red" v-for="kill in sortKilled(killed)" :key="kill">{{kill + 1}}號</span>被殺死了。</span>
+        <span v-if="step === 0 && killed.length > 0">天亮請睜眼。昨晚<span class="red" v-for="kill in killed" :key="kill">{{kill + 1}}號</span>被殺死了。</span>
         <span v-if="step === 0 && killed.length === 0">天亮請睜眼。昨晚是平安夜。</span>
-        <span v-if="step === 1 && nightCount === 0">{{ sortKilled(killed)[0] }}號請發表遺言。</span>
-        <span v-if="step === 2">1號開始發言...</span>
-        <span v-if="step === 3">2號發言...</span>
-        <span v-if="step === 4">3號發言...</span>
-        <span v-if="step === 5">4號發言...</span>
-        <span v-if="step === 6">5號發言...</span>
-        <span v-if="step === 7">6號發言...</span>
-        <span v-if="step === 8">7號發言...</span>
-        <span v-if="step === 9">8號發言...</span>
-        <span v-if="step === 10">9號發言...</span>
-        <span v-if="step === 11">10號發言...</span>
+        <span v-if="step === 1 && nightCount === 0">{{ killed[0] + 1 }}號請發表遺言。</span>
+        <span v-if="step === 2 && player[0] !== ''">1號開始發言...</span>
+        <span v-if="step === 3 && player[1] !== ''">2號發言...</span>
+        <span v-if="step === 4 && player[2] !== ''">3號發言...</span>
+        <span v-if="step === 5 && player[3] !== ''">4號發言...</span>
+        <span v-if="step === 6 && player[4] !== ''">5號發言...</span>
+        <span v-if="step === 7 && player[5] !== ''">6號發言...</span>
+        <span v-if="step === 8 && player[6] !== ''">7號發言...</span>
+        <span v-if="step === 9 && player[7] !== ''">8號發言...</span>
+        <span v-if="step === 10 && player[8] !== ''">9號發言...</span>
+        <span v-if="step === 11 && player[9] !== ''">10號發言...</span>
 
         <span v-if="step === 12">請選擇您要投票的人。</span>
         <span v-if="step === 12 && voteRes[player.indexOf(loginName)].length > 0" class="red" ><br>你要投{{voteRes[player.indexOf(loginName)]}}號</span>
         <div class="selectnumber" v-if="!decided && step === 12">
           <button v-for="i in 10" :key="i" @click="vote(i)">{{i}}號</button>
+          <button v-for="i in 10" :key="i" @click="vote(99)">不投</button>
         </div>
         <span v-if="step === 20" v-for="kill in killed" :key="kill">{{player[kill]}}號平票，請進行辯論</span>
         <span v-if="step === 40">{{killed[0]}}號發言</span>
         <span v-if="step === 41">{{killed[1]}}號發言</span>
-        <span v-if="step === 42">{{killed[2]}}號發言</span>
-        <span v-if="step === 43">{{killed[3]}}號發言</span>
-        <span v-if="step === 44">{{killed[4]}}號發言</span>
-        <span v-if="step === 45">{{killed[5]}}號發言</span>
-        <span v-if="step === 46">{{killed[6]}}號發言</span>
-        <span v-if="step === 47">{{killed[7]}}號發言</span>
-        <span v-if="step === 48">{{killed[8]}}號發言</span>
-        <span v-if="step === 49">{{killed[9]}}號發言</span>
+        <span v-if="step === 42 && killed.length === 3">{{killed[2]}}號發言</span>
+        <span v-if="step === 43 && killed.length === 4">{{killed[3]}}號發言</span>
+        <span v-if="step === 44 && killed.length === 5">{{killed[4]}}號發言</span>
+        <span v-if="step === 45 && killed.length === 6">{{killed[5]}}號發言</span>
+        <span v-if="step === 46 && killed.length === 7">{{killed[6]}}號發言</span>
+        <span v-if="step === 47 && killed.length === 8">{{killed[7]}}號發言</span>
+        <span v-if="step === 48 && killed.length === 9">{{killed[8]}}號發言</span>
+        <span v-if="step === 49 && killed.length === 10">{{killed[9]}}號發言</span>
 
         <!-- 平票在回step 12 -->
 
-        <span v-if="step === 23">{{}}號被票死了，請發表遺言</span>
+        <span v-if="step === 23">{{ killed[0] + 1 }}號被票死了，請發表遺言</span>
 
         <span v-if="step === 24">平票，進入夜晚。</span>
-
-        <span v-if="step === 30">{{ sortKilled(killed)[0] }}請發表遺言。</span>
+        <span v-if="step === 25">沒人投票，進入夜晚。</span>
 
       </div>
       <div class="identify" v-if="player.includes(loginName)">
@@ -68,6 +68,7 @@
     </div>
     <div class="pass-bt">
       <button v-if="!night && step >= 1 && step <= 11" @click="nextstep()" >結束發言</button> <!--step === player.indexOf(loginName) + 2 || (step === 1 && killed[0] === player.indexOf(loginName))-->
+      <button v-if="!night && step === 12" @click="nextstep()" >結束發言</button>
       <button v-if="!night && step >= 40 && step <= 49" @click="talknextstep()" >結束發言</button>
       <button v-if="!night && step === 23" @click="lastword()" >結束發言</button>
     </div>
@@ -86,7 +87,7 @@
           <p :class="{red:(voteRes[player.indexOf(play)] !== null && voteRes[player.indexOf(play)] !== undefined)}">{{play}}選擇殺<a v-if="voteRes[player.indexOf(play)] !== null && voteRes[player.indexOf(play)] !== undefined">{{voteRes[player.indexOf(play)] + 1}}</a></p>
         </div>
         <div class="selectnumber" v-if="!decided">
-          <button v-for="i in 10" :key="i" @click="vote(i)">{{i}}號</button>
+          <button v-for="i in 10" :key="i" v-if="player[i - 1] !== ''" @click="vote(i)">{{i}}號</button>
         </div>
         <!-- <button @click="decideKill()" :disabled="decided && (voteRes[player.indexOf(loginName)] !== null)">確定</button> -->
         <span v-if="killed.length > 0" class="red">...{{killed[0] + 1}}號被殺掉了</span>
@@ -100,7 +101,7 @@
         </div>
         <button @click="noSaveOrPoison()">不要</button>
         <div class="poison-btn">
-          <button v-for="i in 10" :key="i" v-if="i !== player.indexOf(loginName) + 1" @click="poison(i - 1)">{{ i }}號</button>
+          <button v-for="i in 10" :key="i" v-if="i !== player.indexOf(loginName) + 1 && player[i - 1] !== ''" @click="poison(i - 1)">{{ i }}號</button>
         </div>
       </div>
       <div class="eyes nightAction" v-if="(step === 6) && identify[player.indexOf(loginName)] === 3">
@@ -187,6 +188,11 @@ export default {
             }, 4000)
             break
           case 4: // witch save
+            if (vm.player[vm.identify.indexOf(2)] === '') {
+              setTimeout(() => {
+                vm.setStep(5)
+              }, 4000)
+            }
             break
           case 5:
             setTimeout(() => {
@@ -195,16 +201,28 @@ export default {
             break
           case 6:
             // eyes see
+            if (vm.player[vm.identify.indexOf(3)] === '') {
+              setTimeout(() => {
+                vm.setStep(7)
+              }, 4000)
+            }
             break
           case 7:
             setTimeout(() => {
+              let obj = {
+                value: 99
+              }
               vm.setStep(0)
               vm.setNight(false)
-              vm.decided =false
+              vm.setVote(obj)
+              vm.decided = false
             }, 3000)
             break
         }
       } else {
+        let obj = {
+              value: 99
+            }
         switch (val) {
           case 99:
             setTimeout(() => {
@@ -214,7 +232,7 @@ export default {
             break
           case 0:
             // 第一夜
-            if (this.killed.length > 0) { // 有人死 有遺言
+            if (vm.killed.length > 0) { // 有人死 有遺言
               setTimeout(() => {
                 vm.setStep(1)
               }, 3000)
@@ -225,56 +243,69 @@ export default {
             }
             break
           case 1:
-
             break
           case 2:
-
+            if (vm.player[0] === '') {
+              vm.setStep(vm.step + 1)
+            }
             break
           case 3:
-
+            if (vm.player[1] === '') {
+              vm.setStep(vm.step + 1)
+            }
             break
           case 4:
-
+            if (vm.player[2] === '') {
+              vm.setStep(vm.step + 1)
+            }
             break
           case 5:
-
+            if (vm.player[3] === '') {
+              vm.setStep(vm.step + 1)
+            }
             break
           case 6:
-
+            if (vm.player[4] === '') {
+              vm.setStep(vm.step + 1)
+            }
             break
           case 7:
-
+            if (vm.player[5] === '') {
+              vm.setStep(vm.step + 1)
+            }
             break
           case 8:
+            if (vm.player[6] === '') {
+              vm.setStep(vm.step + 1)
+            }
             break
           case 9:
+            if (vm.player[7] === '') {
+              vm.setStep(vm.step + 1)
+            }
             break
           case 10:
+            if (vm.player[8] === '') {
+              vm.setStep(vm.step + 1)
+            }
             break
           case 11:
+            if (vm.player[9] === '') {
+              vm.setStep(vm.step + 1)
+            }
             break
           case 12: // vote
-            let obj = {
-              value: 99
-            }
-            setTimeout(() => {
-              vm.setNight(true)
-              vm.setStep(0)
-              vm.setVote(obj)
-              vm.setKilled(99)
-              vm.setNightCount()
-            }, 4000) // 15s
             break
           case 20: // even
             setTimeout(() => {
-                vm.setStep(40)
-              }, 3000)
+              vm.setStep(40)
+            }, 3000)
             break
           case 21: // talk
             break
           case 22: // 投票 15s
             break
-          case 23: // ? die
+          case 23: // die & last word
             break
           case 24: // even too, night
             setTimeout(() => {
@@ -283,15 +314,32 @@ export default {
               vm.setVote(obj)
               vm.setKilled(99)
               vm.setNightCount()
-            }, 4000)
+              vm.even = 0
+            }, 3000)
             break
-          // case 11:
-          //   break
-          // case 11:
-          //   break
-          case 40: // even talk forst
+          case 25:
+            setTimeout(() => {
+              vm.setNight(true)
+              vm.setStep(0)
+              vm.setVote(obj)
+              vm.setKilled(99)
+              vm.setNightCount()
+              vm.even = 0
+            }, 3000)
             break
-          case 41: // second
+          case 40: // even, talk first
+          case 41: // second ...
+          case 42:
+          case 43:
+          case 44:
+          case 45:
+          case 46:
+          case 47:
+          case 48:
+          case 49:
+            if (vm.killed.length === vm.step - 40) {
+              vm.setStep(12)
+            }
             break
         }
       }
@@ -415,53 +463,52 @@ export default {
         setTimeout(() => { // 等資料到
 
           let killedList = vm.voteRes.filter(num => num !== null) // [1,2,3]
-
+          let wolfCount = 0
+          for (let j = 0; j < vm.player.length; j++) {
+            if (vm.player[j] !== '' && vm.identify[vm.player[j]] === 5) {
+              wolf
+            }
+          }
           if (killedList.length === 3) { // 3人都投才進行
-            let repeat = killedList.filter((e,index,arr) => { return arr.indexOf(e) !== index }) // 找出重複 []
-
-            if (repeat !== []) { // 多數決
-              vm.setKilled(repeat[0])
+            let result = vm.ana(killedList)
+            if (result.length === 1) { // 多數決
+              vm.setKilled(result[0])
             } else { // 平票，3取一殺
-              let result = killedList.filter((e,index,arr) => { return arr.indexOf(e) === index }) // 不重複 [1,2,3]
               vm.setKilled(vm.shuffle(result)[0]) // 洗牌後 殺第一個
             }
-            this.decided = false
             vm.setStep(2)
           }
         }, 1100)
       } else { // morning
-        let obj = {
-          player: this.player.indexOf(vm.loginName),
-          value: i - 1
-        }
-        this.setVote(obj)
-
-        setTimeout(() => { // 等資料到
-
-          let killedList = vm.ana(vm.voteRes)
-
-          if (killedList.length === 1) { // 最高票
-            vm.setKilled(killedList[0])
-            vm.setStep(23)
-          } else if (killedList.length > 1) { // 平票 step20
-            if (vm.even === 0) { // 第一次平票 再辯論
-              vm.setStep(20)
-              vm.even = 1
-            } else { // 第二次平票 進夜晚
-              obj.value = 99
-
-              vm.setNight(true) // reset
-              vm.setStep(0)
-              vm.setVote(obj)
-              vm.setKilled(99)
-              vm.setNightCount()
-              vm.even = 0
-            }
-          } else { // nobody vote
-            vm.setStep(0)
-            vm.setNight(true)
+        if (i === 99) { // not vote
+          this.decided = true
+        } else {
+          let obj = {
+            player: this.player.indexOf(vm.loginName),
+            value: i - 1
           }
-        }, 15000)
+          this.setVote(obj)
+          this.decided = true
+
+          setTimeout(() => { // 等15s
+
+            let killedList = vm.ana(vm.voteRes)
+
+            if (killedList.length === 1) { // 最高票
+              vm.setKilled(killedList[0])
+              vm.setStep(23)
+            } else if (killedList.length > 1) { // 平票 step20
+              if (vm.even === 0) { // 第一次平票 再辯論
+                vm.setStep(20)
+                vm.even = 1
+              } else { // 第二次平票 進夜晚
+                vm.setStep(24)
+              }
+            } else { // nobody vote
+              vm.setStep(25)
+            }
+          }, 10000)
+        }
       }
     },
     save() {
@@ -501,17 +548,17 @@ export default {
         case 1: // morning last word
           if (this.killed.length > 1) {
             if (this.firstlastword) {
-              this.setDieOut(this.player.indexOf(this.killed[0]))
+              this.setDieOut(this.killed[0])
               this.setKilled(1) // shift
               this.firstlastword = false
             } else {
-              this.setDieOut(this.player.indexOf(this.killed[0]))
+              this.setDieOut(this.killed[0])
               this.firstlastword = true
               this.setStep(2)
               this.setKilled(99)
             }
           } else { // die one person
-            this.setDieOut(this.player.indexOf(this.killed[0]))
+            this.setDieOut(this.killed[0])
             this.setKilled(99)
             this.setStep(2)
           }
@@ -532,14 +579,14 @@ export default {
       }
     },
     talknextstep () {
-
+      this.setStep(this.step + 1)
     },
     lastword () {
       // die
       let obj = {
         value : 99
       }
-      this.setDieOut(player.indexOf(this.Killed[0]))
+      this.setDieOut(this.player[this.Killed[0]])
       this.even = 0
       this.setVote(obj)
       this.setKilled(99)
@@ -579,7 +626,7 @@ export default {
           newArr.push(arr)
         }
       }
-      return re(newArr)
+      return this.re(newArr)
     },
     re (arr) { // 投票計算
       let maxCount = 0

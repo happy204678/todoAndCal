@@ -76,8 +76,11 @@ export const setKilled = ({ commit }, value) => {
     store.set('killed', array)
     commit(types.SET_KILLED, array)
   } else {
-    let array = store.get('killed') !== undefined ? store.get('killed') : []
-    array.push(value)
+    let arr = store.get('killed') !== undefined ? store.get('killed') : []
+    arr.push(value)
+    let array = arr.sort((a, b) => {
+      return a - b
+    })
     store.set('killed', array)
     commit(types.SET_KILLED, array)
   }
