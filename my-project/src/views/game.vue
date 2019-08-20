@@ -12,8 +12,8 @@
         <span v-if="step === 0 && killed.length > 0">天亮請睜眼。昨晚<span class="red" v-for="kill in killed" :key="kill">{{kill + 1}}號</span>被殺死了。</span>
         <span v-if="step === 0 && killed.length === 0">天亮請睜眼。昨晚是平安夜。</span>
         <span v-if="step === 1 && nightCount === 0">{{ killed[0] + 1 }}號請發表遺言。</span>
-        <div class="morningSelectnumber" v-if="step === 1 && nightCount === 0 && identify[player[killed[0]]] === 4">
-          <button v-for="i in 10" :key="i" v-if="player[i] !== ''" @click="hunterShot(i - 1)">{{ i }}</button> <!-- player.indexOf(loginName) === killed[0] && !witchPoisonHunter-->
+        <div class="morningSelectnumber" v-if="step === 1 && nightCount === 0 && identify[player[killed[0]]] === 4 && !hunterShot">
+          <button v-for="i in 10" :key="i" v-if="player[i] !== ''" @click="whoShot(i - 1)">{{ i }}</button> <!-- player.indexOf(loginName) === killed[0] && !witchPoisonHunter-->
         </div>
         <span v-if="step === 2 && player[0] !== ''">1號開始發言...</span>
         <span v-if="step === 3 && player[1] !== ''">2號發言...</span>
@@ -61,7 +61,7 @@
     </div>
     <div class="player" v-if="player.length > 0">
       <ul>
-        <li v-for="(play, index) in player" :key="index" @click="vote(index)" :class="{'light': night && step === 1 && identify[player.indexOf(loginName)] === 5 && identify[player.indexOf(play)] === 5}">
+        <li v-for="(play, index) in player" :key="index" :class="{'light': night && step === 1 && identify[player.indexOf(loginName)] === 5 && identify[player.indexOf(play)] === 5}">
           <div>
             <span>{{index + 1}}號位</span>
             <p :class="{'red': play === loginName}">{{play}}</p>
@@ -149,6 +149,7 @@ export default {
       even: 0,
       firstlastword: true,
       witchPoisonHunter: false,
+      hunterShot: false,
       playerWhoshoted: Number,
       tmpStepByHunterShot: Number,
       witchAction: false
@@ -180,7 +181,6 @@ export default {
             } else {
 
             }
-
             break
           case 1: // wolfkill, the vote.length === 3 will continue
             break
@@ -303,9 +303,11 @@ export default {
             break
           case 12: // vote
             setTimeout(() => {
-              let killedList = vm.ana(vm.voteRes)
-
+              let filterVote = vm.voteRes.filter(n => n !== null)
+              let killedList = vm.ana(filterVote)
+              console.log(killedList)
               if (killedList.length === 1) { // 最高票
+
                 vm.setKilled(killedList[0])
                 vm.setStep(23)
               } else if (killedList.length > 1) { // 平票 step20
@@ -558,7 +560,8 @@ export default {
         vm.setStep(7)
       }, 3000)
     },
-    hunterShot (player) {
+    whoShot (player) {
+      this.hunterShot = true
       this.setDieOut(player)
       this.playerWhoshoted = player + 1
       this.tmpStepByHunterShot = this.step
