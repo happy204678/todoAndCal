@@ -4,7 +4,7 @@
       <span v-if="night">第{{nightCountSpan}}夜</span>
       <span v-else>第{{nightCountSpan}}日</span>
       <div>
-        <button @click="gameOver()" style="z-index: 100">結束遊戲</button>
+        <button class="gameover-btn" @click="gameOver()" style="z-index: 100">結束遊戲</button>
       </div>
       <div class="word" v-if="!night">
         <span v-if="step === 99">請確認自己的身分...</span>
@@ -12,7 +12,7 @@
         <span v-if="step === 0 && killed.length > 0">天亮請睜眼。昨晚<span class="red" v-for="kill in killed" :key="kill">{{kill + 1}}號</span>被殺死了。</span>
         <span v-if="step === 0 && killed.length === 0">天亮請睜眼。昨晚是平安夜。</span>
         <span v-if="step === 1 && nightCount === 0">{{ killed[0] + 1 }}號請發表遺言。</span>
-        <div class="selectnumber" v-if="step === 1 && nightCount === 0 && identify[player[killed[0]]] === 4">
+        <div class="morningSelectnumber" v-if="step === 1 && nightCount === 0 && identify[player[killed[0]]] === 4">
           <button v-for="i in 10" :key="i" v-if="player[i] !== ''" @click="hunterShot(i - 1)">{{ i }}</button> <!-- player.indexOf(loginName) === killed[0] && !witchPoisonHunter-->
         </div>
         <span v-if="step === 2 && player[0] !== ''">1號開始發言...</span>
@@ -27,10 +27,10 @@
         <span v-if="step === 11 && player[9] !== ''">10號發言...</span>
 
         <span v-if="step === 12">請選擇您要投票的人。</span>
-        <span v-if="step === 12 && voteRes[player.indexOf(loginName)].length > 0" class="red" ><br>你要投{{voteRes[player.indexOf(loginName)]}}號</span>
-        <div class="selectnumber" v-if="!decided && step === 12">
+        <span v-if="step === 12"><br>你要投...</span><span class="red" v-if="voteRes[player.indexOf(loginName)] > 0">{{voteRes[player.indexOf(loginName)]}}號!</span>
+        <div class="morningSelectnumber" v-if="!decided && step === 12">
           <button v-for="i in 10" :key="i" @click="vote(i)">{{i}}號</button>
-          <button v-for="i in 10" :key="i" @click="vote(99)">不投</button>
+          <button @click="vote(99)">不投</button>
         </div>
         <span v-if="step === 20" v-for="kill in killed" :key="kill">{{player[kill]}}號平票，請進行辯論</span>
         <span v-if="step === 40">{{killed[0]}}號發言</span>
@@ -96,7 +96,7 @@
         <span v-if="killed.length > 0" class="red">...{{killed[0] + 1}}號被殺掉了</span>
       </div>
 
-      <div class="witch nightAction" v-if="(step === 3 || step === 4) && identify[player.indexOf(loginName)] === 2">
+      <div class="witch nightAction" v-if="(step === 3 || step === 4) && identify[player.indexOf(loginName)] === 2 && !witchAction">
         <span class="red">{{killed[0] + 1}}號被殺了</span>
         <div class="witchCard">
           <img @click="save()" :class="{displaynone: killed[0] !== player.indexOf(loginName) + 1, displayunset: nightCount === 0}" src="/static/image/whokills/id9.jpg"/>
@@ -150,7 +150,8 @@ export default {
       firstlastword: true,
       witchPoisonHunter: false,
       playerWhoshoted: Number,
-      tmpStepByHunterShot: Number
+      tmpStepByHunterShot: Number,
+      witchAction: false
     }
   },
   watch: {
@@ -301,6 +302,23 @@ export default {
             }
             break
           case 12: // vote
+            setTimeout(() => {
+              let killedList = vm.ana(vm.voteRes)
+
+              if (killedList.length === 1) { // 最高票
+                vm.setKilled(killedList[0])
+                vm.setStep(23)
+              } else if (killedList.length > 1) { // 平票 step20
+                if (vm.even === 0) { // 第一次平票 再辯論
+                  vm.setStep(20)
+                  vm.even = 1
+                } else { // 第二次平票 進夜晚
+                  vm.setStep(24)
+                }
+              } else { // nobody vote
+                vm.setStep(25)
+              }
+            }, 10000)
             break
           case 20: // even
             setTimeout(() => {
@@ -500,29 +518,11 @@ export default {
           }
           this.setVote(obj)
           this.decided = true
-
-          setTimeout(() => { // 等15s
-
-            let killedList = vm.ana(vm.voteRes)
-
-            if (killedList.length === 1) { // 最高票
-              vm.setKilled(killedList[0])
-              vm.setStep(23)
-            } else if (killedList.length > 1) { // 平票 step20
-              if (vm.even === 0) { // 第一次平票 再辯論
-                vm.setStep(20)
-                vm.even = 1
-              } else { // 第二次平票 進夜晚
-                vm.setStep(24)
-              }
-            } else { // nobody vote
-              vm.setStep(25)
-            }
-          }, 10000)
         }
       }
     },
     save() {
+      this.witchAction = true
       this.setKilled(99)
       this.setStep(5)
     },
@@ -531,6 +531,7 @@ export default {
       // this.setStep(5)
     },
     poison (player) {
+      this.witchAction = true
       this.setKilled(player)
       if (this.identify[player] === 5) {
         this.witchPoisonHunter = true
@@ -538,6 +539,7 @@ export default {
       this.setStep(5)
     },
     noSaveOrPoison () {
+      this.witchAction = true
       this.setStep(5)
     },
     eye (i) {

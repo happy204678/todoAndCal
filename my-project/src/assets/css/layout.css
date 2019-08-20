@@ -314,7 +314,7 @@ div {
     font-size: 5vw;
     font-weight: 900
   }
-  .top button {
+  .top .gameover-btn {
     position: absolute;
     top: 0px;
     right: 0px;
