@@ -3,7 +3,6 @@ export const identify = state => { return state.identify }
 export const player = state => { return state.player }
 export const gameStart = state => { return state.gameStart }
 export const online = state => { return state.userName.length }
-export const OGMode = state => { return state.OGMode }
 export const night = state => { return state.night }
 export const nightCount = state => { return state.nightCount }
 export const step = state => { return state.step }

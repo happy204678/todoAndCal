@@ -202,9 +202,9 @@ div {
   }
   .hall .carddisplay .information {
     width: 190px;
-    padding: 20px;
+    padding: 0 20px 20px 20px;
     color: white;
-    font-size: 30px
+    font-size: 28px
   }
   .hall .carddisplay .card {
     float: left;
@@ -291,6 +291,7 @@ div {
   .hall .modeselect button {
     height: 50px;
     width: 100px;
+    margin-bottom: 10px;
     background-color: rgb(77, 77, 77);
     border-color: rgb(121, 121, 121)
   }
@@ -347,7 +348,7 @@ div {
   }
   .top .identify .card-front {
     position:absolute;
-    background-image: url('../images/whokills/cardBack.jpg');
+    background-image: url('/static/image/whokills/cardBack.jpg');
     background-size: 100% 100%;
     width: 100%;
     height: 100%;
@@ -471,9 +472,6 @@ div {
     z-index: 10;
     background-color: rgb(0, 0, 0, .7)
   }
-  .nightAction {
-
-  }
   .night span {
     position: absolute;
     width: 850px;
@@ -585,6 +583,11 @@ div {
   }
   .displayunset {
     display: unset !important;
+  }
+  .selectMode {
+    background-color: rgb(121, 121, 121) !important;
+    border-color: rgb(77, 77, 77) !important;
+    color: white
   }
 
 @media screen and (max-width: 600px){
