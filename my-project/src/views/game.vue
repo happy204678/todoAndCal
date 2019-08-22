@@ -33,14 +33,14 @@
         <span v-if="step === 20" v-for="kill in killed" :key="kill">{{ player[kill] }}號平票，請進行辯論</span>
         <span v-if="step === 40">{{ killed[0] }}號發言</span>
         <span v-if="step === 41">{{ killed[1] }}號發言</span>
-        <span v-if="step === 42 && killed.length === 3">{{ killed[2] }}號發言</span>
-        <span v-if="step === 43 && killed.length === 4">{{ killed[3] }}號發言</span>
-        <span v-if="step === 44 && killed.length === 5">{{ killed[4] }}號發言</span>
-        <span v-if="step === 45 && killed.length === 6">{{ killed[5] }}號發言</span>
-        <span v-if="step === 46 && killed.length === 7">{{ killed[6] }}號發言</span>
-        <span v-if="step === 47 && killed.length === 8">{{ killed[7] }}號發言</span>
-        <span v-if="step === 48 && killed.length === 9">{{ killed[8] }}號發言</span>
-        <span v-if="step === 49 && killed.length === 10">{{ killed[9] }}號發言</span>
+        <span v-if="step === 42 && killed.length > 2">{{ killed[2] }}號發言</span>
+        <span v-if="step === 43 && killed.length > 3">{{ killed[3] }}號發言</span>
+        <span v-if="step === 44 && killed.length > 4">{{ killed[4] }}號發言</span>
+        <span v-if="step === 45 && killed.length > 5">{{ killed[5] }}號發言</span>
+        <span v-if="step === 46 && killed.length > 6">{{ killed[6] }}號發言</span>
+        <span v-if="step === 47 && killed.length > 7">{{ killed[7] }}號發言</span>
+        <span v-if="step === 48 && killed.length > 8">{{ killed[8] }}號發言</span>
+        <span v-if="step === 49 && killed.length > 9">{{ killed[9] }}號發言</span>
 
         <span v-if="step === 23">{{ killed[0] + 1 }}號被票死了，請發表遺言</span>
 
