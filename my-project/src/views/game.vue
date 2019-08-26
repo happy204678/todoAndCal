@@ -53,7 +53,6 @@
         <span v-if="step === 25">沒人投票，進入夜晚。</span>
 
         <span v-if="step === 26">{{ killed[0] }}號是獵人，他要帶走{{ playerWhoshoted }}。</span>
-
       </div>
       <div class="identify" v-if="player.includes(loginName)">
         <div class="card-front"></div>
@@ -115,7 +114,21 @@
         </div>
         <span class="eyecheck" >{{ tmpeyesnumber }}號是{{ goodman }}</span>
       </div>
-      <div></div>
+      <div class="gameover">
+        <div class="" v-if="step === 90">
+          <h2>正義聯盟獲勝</h2>
+          <br>
+          <button @click="gameOver()">回大廳</button>
+        </div>
+        <div class="" v-if="step === 91">
+          <h2 class="red">邪惡陣營獲勝</h2>
+          <br>
+          <button @click="gameOver()">回大廳</button>
+        </div>
+        <div>
+
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -663,6 +676,31 @@ export default {
         }
       }
       return thisChar
+    },
+    winRule () {
+      let god = 0
+      let people = 0
+      let wolf = 0
+      for (let i = 0; i > player.length; i++) {
+        if (this.player[i] !== '') {
+          if (identify[i] === 1) {
+            people++
+          } else if (identify[i] === 2 && identify[i] === 3 && identify[i] === 4) {
+            god++
+          } else {
+            wolf++
+          }
+        }
+      }
+      if (wolf === 0) {
+        // good win
+        this.setStep(90)
+        this.setNight(true)
+      } else if (people === 0 || god === 0) {
+        // bad win
+        this.setStep(91)
+        this.setNight(true)
+      }
     },
     gameOver () {
       this.setStep(0)

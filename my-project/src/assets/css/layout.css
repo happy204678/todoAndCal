@@ -552,6 +552,14 @@ div {
     top: 60%;
     left: 55%;
   }
+  .gameover {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: 50px;
+    color: rgb(255, 166, 0);
+    z-index: 100;
+  }
 
   ::-webkit-scrollbar {
     width:5px;
