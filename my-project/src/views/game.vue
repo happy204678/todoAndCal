@@ -24,10 +24,11 @@
         <span v-if="step === 9 && player[7] !== ''">8號發言...</span>
         <span v-if="step === 10 && player[8] !== ''">9號發言...</span>
         <span v-if="step === 11 && player[9] !== ''">10號發言...</span>
+
         <span v-if="step === 12">請選擇您要投票的人。</span>
-        <span v-if="step === 12"><br>你要投...</span><span class="red" v-if="voteRes[player.indexOf(loginName)] > 0">{{ voteRes[player.indexOf(loginName)] }}號!</span>
+        <span v-if="step === 12"><br>你要投...</span><span class="red" v-if="voteRes[player.indexOf(loginName)] > 0">{{ voteRes[player.indexOf(loginName)] + 1 }}號!</span>
         <div class="morningSelectnumber" v-if="!decided && step === 12">
-          <button v-for="i in 10" :key="i" @click="vote(i)">{{ i }}號</button>
+          <button v-for="i in 10" :key="i" @click="vote(i)" v-if="player[i] !== ''">{{ i }}號</button>
           <button @click="vote(99)">不投</button>
         </div>
         <span v-if="step === 20" v-for="kill in killed" :key="kill">{{ player[kill] }}號平票，請進行辯論</span>
@@ -88,7 +89,7 @@
 
       <div class="wolfvote" v-if="(step === 1) && identify[player.indexOf(loginName)] === 5">
         <div v-for="(play, index) in player.filter(id => identify[player.indexOf(id)] === 5)" :key="index">
-          <p :class="{red:(voteRes[player.indexOf(play)] !== null && voteRes[player.indexOf(play)] !== undefined)}">{{ player.indexOf(play) }}號選擇殺<a v-if="voteRes[player.indexOf(play)] !== null && voteRes[player.indexOf(play)] !== undefined">{{voteRes[player.indexOf(play)] + 1}}</a></p>
+          <p :class="{red:(voteRes[player.indexOf(play)] !== null && voteRes[player.indexOf(play)] !== undefined)}">{{ player.indexOf(play) + 1 }}號選擇殺<a v-if="voteRes[player.indexOf(play)] !== null && voteRes[player.indexOf(play)] !== undefined">{{voteRes[player.indexOf(play)] + 1}}</a></p>
         </div>
         <div class="selectnumber" v-if="!decided">
           <button v-for="i in 10" :key="i" v-if="player[i - 1] !== ''" @click="vote(i)">{{ i }}號</button>
@@ -97,7 +98,7 @@
         <span v-if="killed.length > 0" class="red">...{{killed[0] + 1}}號被殺掉了</span>
       </div>
 
-      <div class="witch" v-if="(step === 3 || step === 4) && identify[player.indexOf(loginName)] === 2 && !witchAction">
+      <div class="witch" v-if="(step === 3 || step === 4) && identify[player.indexOf(loginName)] === 2">
         <span class="red">{{ killed[0] + 1 }}號被殺了</span>
         <div class="witchCard">
           <img @click="save()" :class="{'displaynone': killed[0] !== player.indexOf(loginName) + 1 && !doSave, 'displayunset': nightCount === 0}" src="/static/image/whokills/id9.jpg"/>
@@ -142,16 +143,16 @@ export default {
   data () {
     return {
       loginName: '',
-      memberList: Array,
-      player: Array,
+      memberList: [],
+      player: [],
       online: 0,
       timer: '',
-      identify: Array,
+      identify: [],
       gameStart: Boolean,
       night: true,
       step: Number,
-      killed: Array,
-      voteRes: Array,
+      killed: [],
+      voteRes: [],
       tmpeyesnumber: Number,
       goodman: '',
       nightCount: Number,
@@ -251,9 +252,13 @@ export default {
             break
           case 0:
             // 第一夜
-            if (vm.killed.length > 0) { // 有人死 有遺言
+            if (vm.killed.length > 0 && vm.nightCount === 0) { // 有人死 有遺言
               setTimeout(() => {
                 vm.setStep(1)
+              }, 3000)
+            } else if (vm.killed.length > 0) { // 第二夜
+              setTimeout(() => {
+                vm.setStep(2)
               }, 3000)
             } else { // 平安夜
               setTimeout(() => {
@@ -315,7 +320,7 @@ export default {
             break
           case 12: // vote
             for (let i = 0; i < 10; i++) { // only the live one listen
-              if (player[i] !== '') {
+              if (vm.player[i] !== '') {
                 setTimeout(() => {
                   let filterVote = vm.voteRes.filter(n => n !== null)
                   let killedList = vm.ana(filterVote)
@@ -340,6 +345,7 @@ export default {
           case 20: // even
             setTimeout(() => {
               vm.setStep(40)
+              vm.decided = false
             }, 3000)
             break
           case 21: // talk
@@ -356,6 +362,7 @@ export default {
               vm.setKilled(99)
               vm.setNightCount()
               vm.even = 0
+              vm.decided = false
             }, 3000)
             break
           case 25:
@@ -366,11 +373,12 @@ export default {
               vm.setKilled(99)
               vm.setNightCount()
               vm.even = 0
+              vm.decided = false
             }, 3000)
             break
           case 26:
              setTimeout(() => {
-              vm.setStep(this.tmpStepByHunterShot)
+              vm.setStep(vm.tmpStepByHunterShot)
             }, 4000)
           case 40: // even, talk first
           case 41: // second ...
@@ -551,7 +559,6 @@ export default {
       this.setStep(5)
     },
     noSaveOrPoison () {
-      this.witchAction = true
       this.setStep(5)
     },
     eye (i) {

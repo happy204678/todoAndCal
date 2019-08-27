@@ -23,6 +23,7 @@
           <li>5.目前勝利條件會在遺言之後判定，請見諒。</li>
         </ul>
       </div>
+      <p>****想要提升遊戲體驗請斗內！****</p>
       <button @click="startGame" :disabled="disabled">開始遊戲</button> <!-- v-if="player.indexOf(loginName) === 0" -->
     </div>
     <div class="member floatr">
