@@ -319,27 +319,31 @@ export default {
             }
             break
           case 12: // vote
-            for (let i = 0; i < 10; i++) { // only the live one listen
+            let frontest = 0
+            for (let i = 0; i < 10; i++) { // only the lived one listen
               if (vm.player[i] !== '') {
-                setTimeout(() => {
-                  let filterVote = vm.voteRes.filter(n => n !== null)
-                  let killedList = vm.ana(filterVote)
-                  if (killedList.length === 1) { // 最高票
-                    vm.setKilled(killedList[0])
-                    vm.setStep(23)
-                  } else if (killedList.length > 1) { // 平票 step20
-                    if (vm.even === 0) { // 第一次平票 再辯論
-                      vm.setStep(20)
-                      vm.even = 1
-                    } else { // 第二次平票 進夜晚
-                      vm.setStep(24)
-                    }
-                  } else { // nobody vote
-                    vm.setStep(25)
-                  }
-                }, 10000)
+                frontest = i
                 break
               }
+            }
+            if (this.player.indexOf(this.loginName) === frontest) {
+              setTimeout(() => {
+                let filterVote = vm.voteRes.filter(n => n !== null)
+                let killedList = vm.ana(filterVote)
+                if (killedList.length === 1) { // 最高票
+                  vm.setKilled(killedList[0])
+                  vm.setStep(23)
+                } else if (killedList.length > 1) { // 平票 step20
+                  if (vm.even === 0) { // 第一次平票 再辯論
+                    vm.setStep(20)
+                    vm.even = 1
+                  } else { // 第二次平票 進夜晚
+                    vm.setStep(24)
+                  }
+                } else { // nobody vote
+                  vm.setStep(25)
+                }
+              }, 10000)
             }
             break
           case 20: // even
@@ -627,7 +631,7 @@ export default {
       let obj = {
         value : 99
       }
-      this.setDieOut(this.player[this.Killed[0]])
+      this.setDieOut(this.Killed[0])
       this.even = 0
       this.setVote(obj)
       this.setKilled(99)
