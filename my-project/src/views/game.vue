@@ -12,7 +12,7 @@
         <span v-if="step === 0 && killed.length === 0">天亮請睜眼。昨晚是平安夜。</span>
         <span v-if="step === 1 && nightCount === 0">{{ killed[0] + 1 }}號請發表遺言。</span>
         <div class="morningSelectnumber" v-if="step === 1 && identify[killed[0]] === 4 && killed[0] === player.indexOf(loginName) && !hunterShot">
-          <button v-for="i in 10" :key="i" v-if="player[i] !== ''" @click="whoShot(i - 1)">{{ i }}</button> <!-- player.indexOf(loginName) === killed[0] && !witchPoisonHunter-->
+          <button v-for="i in 10" :key="i" v-if="player[i - 1] !== ''" @click="whoShot(i - 1)">{{ i }}號</button> <!-- player.indexOf(loginName) === killed[0] && !witchPoisonHunter-->
         </div>
         <span v-if="step === 2 && player[0] !== ''">1號開始發言...</span>
         <span v-if="step === 3 && player[1] !== ''">2號發言...</span>
@@ -26,7 +26,7 @@
         <span v-if="step === 11 && player[9] !== ''">10號發言...</span>
 
         <span v-if="step === 12">請選擇您要投票的人。</span>
-        <span v-if="step === 12"><br>你要投...</span><span class="red" v-if="voteRes[player.indexOf(loginName)] > 0">{{ voteRes[player.indexOf(loginName)] + 1 }}號!</span>
+        <span v-if="step === 12"><br>你要投...</span><span class="red" v-if="voteRes[player.indexOf(loginName)] > 0 && step === 12">{{ voteRes[player.indexOf(loginName)] + 1 }}號!</span>
         <div class="morningSelectnumber" v-if="!decided && step === 12">
           <button v-for="i in 10" :key="i" @click="vote(i)" v-if="player[i] !== ''">{{ i }}號</button>
           <button @click="vote(99)">不投</button>
@@ -43,17 +43,17 @@
         <span v-if="step === 48 && killed.length > 8">{{ killed[8] }}號發言</span>
         <span v-if="step === 49 && killed.length > 9">{{ killed[9] }}號發言</span>
 
-        <span v-if="step === 23">{{ killed[0] + 1 }}號被票死了，請發表遺言</span>
+        <span v-if="step === 23" class="red">{{ killed[0] + 1 }}號</span><span v-if="step === 23">被票死了，請發表遺言</span>
 
         <div class="morningSelectnumber" v-if="step === 23 && identify[killed[0]] === 4 && killed[0] === player.indexOf(loginName) && !hunterShot">
-          <button v-for="i in 10" :key="i" v-if="player[i] !== ''" @click="whoShot(i - 1)">{{ i }}</button> <!-- player.indexOf(loginName) === killed[0] && !witchPoisonHunter-->
+          <button v-for="i in 10" :key="i" v-if="player[i - 1] !== ''" @click="whoShot(i - 1)">{{ i }}號</button> <!-- player.indexOf(loginName) === killed[0] && !witchPoisonHunter-->
         </div>
 
         <span v-if="step === 24">平票，進入夜晚。</span>
 
         <span v-if="step === 25">沒人投票，進入夜晚。</span>
 
-        <span v-if="step === 26">{{ killed[0] }}號是獵人，他要帶走{{ playerWhoshoted }}。</span>
+        <span v-if="step === 26">{{ killed[0] + 1 }}號是獵人，他要帶走{{ playerWhoshoted }}。</span>
       </div>
       <div class="identify" v-if="player.includes(loginName)">
         <div class="card-front"></div>
@@ -584,8 +584,9 @@ export default {
     whoShot (player) {
       this.hunterShot = true
       this.setDieOut(player)
+      this.setDieOut(this.killed[0])
       this.playerWhoshoted = player + 1
-      this.tmpStepByHunterShot = this.step
+      this.tmpStepByHunterShot = Number(this.step)
       this.setStep(26)
     },
     nextstep () {
@@ -631,7 +632,7 @@ export default {
       let obj = {
         value : 99
       }
-      this.setDieOut(this.Killed[0])
+      this.setDieOut(this.killed[0])
       this.even = 0
       this.setVote(obj)
       this.setKilled(99)

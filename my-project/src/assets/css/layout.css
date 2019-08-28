@@ -573,6 +573,10 @@ div {
     top: 60%;
     left: 55%;
   }
+  .morningSelectnumber button {
+    width: 50px;
+    margin-right: 10px;
+  }
   .gameover {
     position: absolute;
     top: 50%;
