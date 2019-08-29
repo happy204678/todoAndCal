@@ -14,14 +14,14 @@
 
 <script>
 
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 import $ from 'jquery'
 
 export default {
   data () {
     return {
       name: '',
-      permissionList: ['陳宥丞', '123', '葉佳霖', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', 'Kenny'], // 人名登入
+      permissionList: ['陳宥丞', '123', '葉佳霖', '黃均維', '毛君安', '何中淼', '蔡湘霖', '楊景光', '林禹任', '邱俊斌', 'A夢', '陳怡安', '陳宥亘', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', 'Kenny'], // 人名登入
       permissionKey: false,
       timer: '',
       online: 0,
@@ -98,6 +98,6 @@ export default {
   },
   beforeDestroy () {
     window.clearInterval(this.timer)
-  },
+  }
 }
 </script>

@@ -20,7 +20,8 @@
           <li>2.無確認身分階段，開局後身分牌就會一直在頁面右上方，請翻牌查看。</li>
           <li>3.狼人殺人、女巫毒人、預言家驗人、獵人帶人請想好再按，無法反悔。</li>
           <li>4.被獵人或狼王帶走會沒有遺言。</li>
-          <li>5.目前勝利條件會在遺言之後判定，請見諒。</li>
+          <li>5.獵人死時可以選擇不開槍，若不開槍，將不會有任何訊息(如果再沒有遺言的情況，會等獵人決定好再繼續，不是LAG)。</li>
+          <li>6.目前勝利條件會在遺言之後判定，請見諒。</li>
         </ul>
       </div>
       <p>****想要提升遊戲體驗請斗內！****</p>
@@ -74,7 +75,7 @@
 </template>
 <script>
 
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 import $ from 'jquery'
 
 export default {
@@ -89,7 +90,7 @@ export default {
       sitvalue: '準備',
       disabled: false,
       pos: 0,
-      selectMode: [1, 1, 1, 1, 2, 3, 4, 5, 5, 5], //default
+      selectMode: [1, 1, 1, 1, 2, 3, 4, 5, 5, 5], // default
       OGMode: [1, 1, 1, 1, 2, 3, 4, 5, 5, 5], // 1平民 2女巫 3預言家 4獵人 5狼
       wolfKingMode: [1, 1, 1, 2, 3, 4, 6, 5, 5, 7] // 6騎士 7狼王
     }
@@ -114,7 +115,6 @@ export default {
         }, 500)
       }
     }
-
   },
   mounted () {
     var vm = this
@@ -125,7 +125,7 @@ export default {
     } else {
       this.$router.push({ path: '/login' })
     }
-    //抓data
+    // 抓data
     this.timer = setInterval(function () {
       vm.getdata()
     }, 1000)
@@ -162,7 +162,6 @@ export default {
       let vm = this
       // 開始
       window.clearInterval(this.timer)
-      let a = this.player
 
       // sort
       this.setSortPlayer(this.shuffle(this.player))
@@ -192,7 +191,7 @@ export default {
       this.setIdentify(mode)
     },
     shuffle (arr) {
-      let len = arr.length;
+      let len = arr.length
 
       while (len) {
         let i = (Math.random() * len--) >> 0

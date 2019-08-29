@@ -98,10 +98,10 @@
         <span v-if="killed.length > 0" class="red">...{{killed[0] + 1}}號被殺掉了</span>
       </div>
 
-      <div class="witch" v-if="(step === 3 || step === 4) && identify[player.indexOf(loginName)] === 2">
+      <div class="witch" v-if="step === 4 && identify[player.indexOf(loginName)] === 2">
         <span class="red">{{ killed[0] + 1 }}號被殺了</span>
         <div class="witchCard">
-          <img @click="save()" :class="{'displaynone': killed[0] !== player.indexOf(loginName) + 1 && !doSave, 'displayunset': nightCount === 0}" src="/static/image/whokills/id9.jpg"/>
+          <img @click="save()" :class="{'displaynone': killed[0] !== player.indexOf(loginName) + 1 || !doSave, 'displayunset': nightCount === 0}" src="/static/image/whokills/id9.jpg"/>
           <img v-if="!doPoison" @click="poisonFadein()" src="/static/image/whokills/id10.jpg"/>
         </div>
         <button @click="noSaveOrPoison()">不要</button>
@@ -126,9 +126,6 @@
           <br>
           <button @click="gameOver()">回大廳</button>
         </div>
-        <div>
-
-        </div>
       </div>
     </div>
   </div>
@@ -136,7 +133,7 @@
 
 <script>
 
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 import $ from 'jquery'
 
 export default {
@@ -163,7 +160,7 @@ export default {
       witchPoisonHunter: false,
       hunterShot: false, // for hide button
       playerWhoshoted: Number,
-      tmpStepByHunterShot: Number,
+      tmpStepByHunterShot: 0,
       doSave: false,
       doPoison: false
     }
@@ -184,13 +181,13 @@ export default {
             setTimeout(() => {
               vm.setNight(true)
               vm.setStep(0)
-            }, 4000)
+            }, 3000)
             break
           case 0:
             if (vm.killed.length === 0) {
               setTimeout(() => {
                 vm.setStep(1)
-              }, 4000)
+              }, 3000)
             } else {
 
             }
@@ -205,7 +202,7 @@ export default {
           case 3:
             setTimeout(() => {
               vm.setStep(4)
-            }, 4000)
+            }, 3000)
             break
           case 4: // witch save
             if (vm.player[vm.identify.indexOf(2)] === '') {
@@ -217,14 +214,14 @@ export default {
           case 5:
             setTimeout(() => {
               vm.setStep(6)
-            }, 4000)
+            }, 3000)
             break
           case 6:
             // eyes see
             if (vm.player[vm.identify.indexOf(3)] === '') {
               setTimeout(() => {
                 vm.setStep(7)
-              }, 4000)
+              }, 3000)
             }
             break
           case 7:
@@ -241,14 +238,14 @@ export default {
         }
       } else {
         let obj = {
-              value: 99
-            }
+          value: 99
+        }
         switch (val) {
           case 99:
             setTimeout(() => {
               vm.setNight(true)
               vm.setStep(0)
-            }, 4000)
+            }, 3000)
             break
           case 0:
             // 第一夜
@@ -381,9 +378,7 @@ export default {
             }, 3000)
             break
           case 26:
-             setTimeout(() => {
-              vm.setStep(vm.tmpStepByHunterShot)
-            }, 4000)
+            break
           case 40: // even, talk first
           case 41: // second ...
           case 42:
@@ -438,28 +433,28 @@ export default {
       vm.getdata()
     }, 1000)
     // setTimeout(() => {
-      // if (this.player.length > 0) {
-      //   $('.player ul li:nth-child(1)').fadeIn(300, () => {
-      //     $('.player ul li:nth-child(2)').fadeIn(300, () => {
-      //       $('.player ul li:nth-child(3)').fadeIn(300, () => {
-      //         $('.player ul li:nth-child(4)').fadeIn(300, () => {
-      //           $('.player ul li:nth-child(5)').fadeIn(300, () => {
-      //             $('.player ul li:nth-child(6)').fadeIn(300, () => {
-      //               $('.player ul li:nth-child(7)').fadeIn(300, () => {
-      //                 $('.player ul li:nth-child(8)').fadeIn(300, () => {
-      //                   $('.player ul li:nth-child(9)').fadeIn(300, () => {
-      //                     $('.player ul li:nth-child(10)').fadeIn(300, () => {
-      //                     })
-      //                   })
-      //                 })
-      //               })
-      //             })
-      //           })
-      //         })
-      //       })
-      //     })
-      //   })
-      // }
+    //   if (this.player.length > 0) {
+    //     $('.player ul li:nth-child(1)').fadeIn(300, () => {
+    //       $('.player ul li:nth-child(2)').fadeIn(300, () => {
+    //         $('.player ul li:nth-child(3)').fadeIn(300, () => {
+    //           $('.player ul li:nth-child(4)').fadeIn(300, () => {
+    //             $('.player ul li:nth-child(5)').fadeIn(300, () => {
+    //               $('.player ul li:nth-child(6)').fadeIn(300, () => {
+    //                 $('.player ul li:nth-child(7)').fadeIn(300, () => {
+    //                   $('.player ul li:nth-child(8)').fadeIn(300, () => {
+    //                     $('.player ul li:nth-child(9)').fadeIn(300, () => {
+    //                       $('.player ul li:nth-child(10)').fadeIn(300, () => {
+    //                       })
+    //                     })
+    //                   })
+    //                 })
+    //               })
+    //             })
+    //           })
+    //         })
+    //       })
+    //     })
+    //   }
     // }, 300)
     setTimeout(() => {
       let obj = {
@@ -471,7 +466,6 @@ export default {
       vm.setVote(obj)
       vm.setKilled(99)
     })
-
   },
   methods: {
     ...mapActions(['setLogout', 'getData', 'setGameOver', 'setVote', 'setStep', 'setNightCount', 'setKilled', 'setNight', 'setDieOut']),
@@ -512,7 +506,6 @@ export default {
         this.decided = true
 
         setTimeout(() => { // 等資料到
-
           let killedList = vm.voteRes.filter(num => num !== null) // [1,2,3]
           let wolfCount = 0
           for (let j = 0; j < vm.player.length; j++) {
@@ -544,7 +537,7 @@ export default {
         }
       }
     },
-    save() {
+    save () {
       this.doSave = true
       this.setKilled(99)
       this.setStep(5)
@@ -586,8 +579,16 @@ export default {
       this.setDieOut(player)
       this.setDieOut(this.killed[0])
       this.playerWhoshoted = player + 1
-      this.tmpStepByHunterShot = Number(this.step)
+      if (this.killed.length === 0) {
+        this.step26(this.step + 1)
+      }
+    },
+    step26 (next) {
+      var vm = this
       this.setStep(26)
+      setTimeout(() => {
+        vm.setStep(next)
+      }, 4000)
     },
     nextstep () {
       // should check die or not
@@ -630,7 +631,7 @@ export default {
     lastword () {
       // die
       let obj = {
-        value : 99
+        value: 99
       }
       this.setDieOut(this.killed[0])
       this.even = 0
@@ -641,7 +642,7 @@ export default {
       this.setStep(0)
     },
     shuffle (arr) {
-      let len = arr.length;
+      let len = arr.length
 
       while (len) {
         let i = (Math.random() * len--) >> 0
@@ -653,16 +654,16 @@ export default {
       return arr
     },
     sortKilled (arr) {
-      arr.sort(function(a, b) {
-        return a - b;
+      arr.sort((a, b) => {
+        return a - b
       })
     },
     ana (arr) { // 投票計算
       let newArr = []
       let unique = []
       for (let i of arr) {
-        i = JSON.stringify(i);
-        //如果已有数值相同的元素存在
+        i = JSON.stringify(i)
+        // 如果已有数值相同的元素存在
         if (unique.includes(i)) {
           newArr[unique.indexOf(i)].push(i)
         } else {
@@ -693,11 +694,11 @@ export default {
       let god = 0
       let people = 0
       let wolf = 0
-      for (let i = 0; i > player.length; i++) {
+      for (let i = 0; i > this.player.length; i++) {
         if (this.player[i] !== '') {
-          if (identify[i] === 1) {
+          if (this.identify[i] === 1) {
             people++
-          } else if (identify[i] === 2 && identify[i] === 3 && identify[i] === 4) {
+          } else if (this.identify[i] === 2 && this.identify[i] === 3 && this.identify[i] === 4) {
             god++
           } else {
             wolf++
