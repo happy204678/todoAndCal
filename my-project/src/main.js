@@ -9,7 +9,7 @@ import router from './router'
 
 // fastclick.attach(document.body)
 Vue.config.productionTip = false
-Vue.use(require('vue-moment'))
+// Vue.use(require('vue-moment'))
 
 let bus = new Vue()
 Vue.prototype.bus = bus

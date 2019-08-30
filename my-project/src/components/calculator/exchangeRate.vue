@@ -10,15 +10,15 @@
         <span class="input focusmi" @click="focusbtm()">{{btmnum}}</span>
       </li>
     </ul>
-    <div class="update">
+    <!-- <div class="update">
       <span>資料來自於微牛，</span><span>{{updateTime}}</span><span>更新</span>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script>
 import $ from 'jquery'
-import moment from 'moment'
+// import moment from 'moment'
 
 export default {
 
@@ -26,8 +26,8 @@ export default {
     return {
       topnum: '1',
       btmnum: '0.2213',
-      selectTop: true,
-      updateTime: ''
+      selectTop: true
+      // updateTime: ''
     }
   },
   watch: {
@@ -46,10 +46,10 @@ export default {
       }
     }
   },
-  mounted () {
-    var date = new Date()
-    this.updateTime = moment(date).format('YYYY/MM/DD HH:mm:ss')
-  },
+  // mounted () {
+  //   var date = new Date()
+  //   this.updateTime = moment(date).format('YYYY/MM/DD HH:mm:ss')
+  // },
   methods: {
     focustop () {
       $('.input').removeClass('selected')
