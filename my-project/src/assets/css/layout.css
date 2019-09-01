@@ -512,10 +512,10 @@ div {
   .wolfvote span {
     top: 40%
   }
-  .wolfvote div:nth-child(2){
+  .wolfvote div.killspan:nth-child(2){
     left: 45%;
   }
-  .wolfvote div:nth-child(3){
+  .wolfvote div.killspan:nth-child(3){
     left: 65%;
   }
   .wolfvote>button {
@@ -578,9 +578,9 @@ div {
     margin-right: 10px;
   }
   .gameover {
-    position: absolute;
-    top: 50%;
-    left: 50%;
+    text-align: center;
+    top: 40%;
+    left: 40%;
     font-size: 50px;
     color: rgb(255, 166, 0);
     z-index: 100;
@@ -615,7 +615,7 @@ div {
     display: none
   }
   .displayunset {
-    display: unset !important;
+    display: block !important;
   }
   .selectMode {
     background-color: rgb(121, 121, 121) !important;

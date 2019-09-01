@@ -33,7 +33,7 @@
       <button @click="closePage()">登出</button>
       <div class="memberList">
         <ul v-if="memberList.length > 0">
-          <li v-for="(member, index) in memberList" :key="index" :class="{'red': member === loginName}"><span>{{ member }}</span><span v-if="player.indexOf(member) >= 0">準備</span></li>
+          <li v-for="(member, index) in memberList" :key="index" :class="{'red': member === loginName}"><span>{{ member }}</span><span v-if="player.indexOf(member) >= 0"> ->準備</span></li>
         </ul>
         <span class="countPoeple">{{ memberList.length }}人</span>
       </div>
@@ -110,9 +110,9 @@ export default {
       let vm = this
       if (val) {
         window.setTimeout(function () {
-          $('.hall').fadeOut(2000, function () {
+          // $('.hall').fadeOut(2000, function () {
             vm.$router.push({ path: '/game/' + vm.loginName })
-          })
+          // })
         }, 500)
       }
     }

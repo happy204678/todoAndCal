@@ -28,7 +28,7 @@
         <span v-if="step === 12">請選擇您要投票的人。</span>
         <span v-if="step === 12"><br>你要投...</span><span class="red" v-if="voteRes[player.indexOf(loginName)] > 0 && step === 12">{{ voteRes[player.indexOf(loginName)] + 1 }}號!</span>
         <div class="morningSelectnumber" v-if="!decided && step === 12">
-          <button v-for="i in 10" :key="i" @click="vote(i)" v-if="player[i] !== ''">{{ i }}號</button>
+          <button v-for="i in 10" :key="i" @click="vote(i)" v-if="player[i - 1] !== ''">{{ i }}號</button>
           <button @click="vote(99)">不投</button>
         </div>
         <span v-if="step === 20" v-for="kill in killed" :key="kill">{{ player[kill] }}號平票，請進行辯論</span>
@@ -66,7 +66,7 @@
       <ul>
         <li v-for="(play, index) in player" :key="index" :class="{'light': night && step === 1 && identify[player.indexOf(loginName)] === 5 && identify[player.indexOf(play)] === 5 && play !== ''}">
           <div>
-            <span>{{ index + 1 }}號位</span>
+            <span v-if="play !== ''">{{ index + 1 }}號位</span>
             <p :class="{'red': play === loginName}">{{ play }}</p>
           </div>
         </li>
@@ -88,7 +88,7 @@
       <span v-if="step === 7">預言家請閉眼。</span>
 
       <div class="wolfvote" v-if="step === 1 && identify[player.indexOf(loginName)] === 5">
-        <div v-for="(play, index) in player.filter(id => identify[player.indexOf(id)] === 5)" :key="index" v-if="play !== ''">
+        <div class="killspan" v-for="(play, index) in player.filter(id => identify[player.indexOf(id)] === 5)" :key="index" v-if="play !== ''">
           <p :class="{red: voteRes[player.indexOf(play)] !== null && voteRes[player.indexOf(play)] !== undefined}">{{ player.indexOf(play) + 1 }}號選擇殺<a v-if="voteRes[player.indexOf(play)] !== null && voteRes[player.indexOf(play)] !== undefined">{{voteRes[player.indexOf(play)] + 1}}</a></p>
         </div>
         <div class="selectnumber" v-if="!decided">
@@ -99,7 +99,7 @@
       </div>
 
       <div class="witch" v-if="step === 4 && identify[player.indexOf(loginName)] === 2">
-        <span class="red" v-if="!doSave">{{ killed[0] + 1 }}號被殺了</span>
+        <span class="red" v-if="!doSave">{{ killed[0] + 1 }}號 {{player[killed[0]]}} 被殺了</span>
         <div class="witchCard">
           <img @click="save()" :class="{'displaynone': killed[0] !== player.indexOf(loginName) + 1 || !doSave, 'displayunset': nightCount === 0}" src="/static/image/whokills/id9.jpg"/>
           <img v-if="!doPoison" @click="poisonFadein()" src="/static/image/whokills/id10.jpg"/>
@@ -257,7 +257,8 @@ export default {
             } else if (vm.killed.length > 0) { // 第二夜
               setTimeout(() => {
                 for (let i = 0; i < vm.killed.length; i++) {
-                  vm.setDieOut(vm.killed[i])
+                  vm.setDieOut(vm.killed[0])
+                  vm.winRule()
                 }
                 vm.setStep(2)
               }, 3000)
@@ -497,6 +498,7 @@ export default {
         console.log('step', this.step)
         console.log('night', this.night)
         console.log('night', this.nightCount)
+        vm.winRule()
       })
     },
     vote (i) {
@@ -584,8 +586,10 @@ export default {
     },
     whoShot (player) {
       this.hunterShot = true
-      this.setDieOut(player)
       this.setDieOut(this.killed[0])
+      this.winRule()
+      this.setDieOut(player)
+      this.winRule()
       this.playerWhoshoted = player + 1
       if (this.killed.length === 0) {
         this.step26(this.step + 1)
@@ -605,16 +609,19 @@ export default {
           if (this.killed.length > 1) {
             if (this.firstlastword) {
               this.setDieOut(this.killed[0])
+              this.winRule()
               this.setKilled(50) // shift
               this.firstlastword = false
             } else {
               this.setDieOut(this.killed[0])
+              this.winRule()
               this.firstlastword = true
               this.setStep(2)
               this.setKilled(99)
             }
           } else { // die one person
             this.setDieOut(this.killed[0])
+            this.winRule()
             this.setKilled(99)
             this.setStep(2)
           }
@@ -642,6 +649,7 @@ export default {
         value: 99
       }
       this.setDieOut(this.killed[0])
+      this.winRule()
       this.even = 0
       this.setVote(obj)
       this.setKilled(99)
@@ -702,17 +710,20 @@ export default {
       let god = 0
       let people = 0
       let wolf = 0
-      for (let i = 0; i > this.player.length; i++) {
+      for (let i = 0; i < this.player.length; i++) {
         if (this.player[i] !== '') {
           if (this.identify[i] === 1) {
             people++
-          } else if (this.identify[i] === 2 && this.identify[i] === 3 && this.identify[i] === 4) {
+          } else if (this.identify[i] === 2 || this.identify[i] === 3 || this.identify[i] === 4) {
             god++
-          } else {
+          } else if (this.identify[i] === 5) {
             wolf++
           }
         }
       }
+      console.log('god', god)
+      console.log('people', people)
+      console.log('wolf', wolf)
       if (wolf === 0) {
         // good win
         this.setStep(90)
