@@ -611,11 +611,14 @@ div {
   .light {
     background-image: linear-gradient(57deg,#ffffff,#000000 0%,#ff9900) !important;
   }
+  .none {
+    background-image: none !important;
+  }
   .displaynone {
     display: none
   }
   .displayunset {
-    display: block !important;
+    display: unset !important;
   }
   .selectMode {
     background-color: rgb(121, 121, 121) !important;

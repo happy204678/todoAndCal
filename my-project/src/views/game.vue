@@ -64,7 +64,7 @@
     </div>
     <div class="player" v-if="player.length > 0">
       <ul>
-        <li v-for="(play, index) in player" :key="index" :class="{'light': night && step === 1 && identify[player.indexOf(loginName)] === 5 && identify[player.indexOf(play)] === 5 && play !== ''}">
+        <li v-for="(play, index) in player" :key="index" :class="{'light': night && step === 1 && identify[player.indexOf(loginName)] === 5 && identify[player.indexOf(play)] === 5 && play !== '', 'none': play === ''}">
           <div>
             <span v-if="play !== ''">{{ index + 1 }}號位</span>
             <p :class="{'red': play === loginName}">{{ play }}</p>
@@ -89,7 +89,7 @@
 
       <div class="wolfvote" v-if="step === 1 && identify[player.indexOf(loginName)] === 5">
         <div class="killspan" v-for="(play, index) in player.filter(id => identify[player.indexOf(id)] === 5)" :key="index" v-if="play !== ''">
-          <p :class="{red: voteRes[player.indexOf(play)] !== null && voteRes[player.indexOf(play)] !== undefined}">{{ player.indexOf(play) + 1 }}號選擇殺<a v-if="voteRes[player.indexOf(play)] !== null && voteRes[player.indexOf(play)] !== undefined">{{voteRes[player.indexOf(play)] + 1}}</a></p>
+          <p :class="{red: voteRes[player.indexOf(play)] !== null && voteRes[player.indexOf(play)] !== undefined}">{{ player.indexOf(play) + 1 }}號選擇殺<a v-if="voteRes[player.indexOf(play)] !== null && voteRes[player.indexOf(play)] !== undefined">{{voteRes[player.indexOf(play)] + 1}}號</a></p>
         </div>
         <div class="selectnumber" v-if="!decided">
           <button v-for="i in 10" :key="i" v-if="player[i - 1] !== '' && notkilllastnightkilled !== i - 1" @click="vote(i)">{{ i }}號</button>
@@ -101,7 +101,7 @@
       <div class="witch" v-if="step === 4 && identify[player.indexOf(loginName)] === 2">
         <span class="red" v-if="!doSave">{{ killed[0] + 1 }}號 {{player[killed[0]]}} 被殺了</span>
         <div class="witchCard">
-          <img @click="save()" :class="{'displaynone': killed[0] !== player.indexOf(loginName) + 1 || !doSave, 'displayunset': nightCount === 0}" src="/static/image/whokills/id9.jpg"/>
+          <img @click="save()" :class="{'displaynone': killed[0] !== player.indexOf(loginName) || !doSave, 'displayunset': nightCount === 0}" src="/static/image/whokills/id9.jpg"/>
           <img v-if="!doPoison" @click="poisonFadein()" src="/static/image/whokills/id10.jpg"/>
         </div>
         <button @click="noSaveOrPoison()">不要</button>
@@ -194,10 +194,12 @@ export default {
             }
             break
           case 1: // wolfkill, the vote.length === 3 will continue
+            vm.decided = false
             break
           case 2:
             setTimeout(() => {
               vm.setStep(3)
+              vm.notkilllastnightkilled = vm.killed[0]
             }, 3000)
             break
           case 3:
@@ -257,9 +259,10 @@ export default {
             } else if (vm.killed.length > 0) { // 第二夜
               setTimeout(() => {
                 for (let i = 0; i < vm.killed.length; i++) {
-                  vm.setDieOut(vm.killed[0])
-                  vm.winRule()
+                  vm.setDieOut(vm.killed[i])
                 }
+                vm.winRule()
+                vm.setKilled(99)
                 vm.setStep(2)
               }, 3000)
             } else { // 平安夜
@@ -523,11 +526,9 @@ export default {
             let result = vm.ana(killedList)
             if (result.length === 1) { // 多數決
               vm.setKilled(result[0])
-              vm.notkilllastnightkilled = result[0]
             } else { // 平票，3取一殺
               let random = vm.shuffle(result)[0]
               vm.setKilled(random) // 洗牌後 殺第一個
-              vm.notkilllastnightkilled = random
             }
             vm.setStep(2)
           }
