@@ -1,6 +1,17 @@
-# my-test
+# 計算機、換算功能、todoList、狼人殺
 
-> A Vue.js project
+DEMO: 
+https://happy204678.github.io/todo&Cal&Whokills/#/
+
+約 2019/10 第一份工作期間練習的作品，2021/01/20 重新整理。
+
+包括計算機、換算功能、todoList、狼人殺遊戲(未完整)
+
+這時期正在HTML、CSS、JS、Vue等等，因此較為青澀。有加入vue組件、vuex功能。
+
+筆記：
+1. 畫面上未考慮RWD設計
+2. 當初設計狼人殺連線功能較天真，想利用vuex達到預期，但結果是單瀏覽器多開分頁可以實現沒錯，但沒有意義。之後改進方向: 1做成同樂的輔助型遊戲網頁(大家需要坐在一起 用這個網頁的提示遊玩)，2加入後端伺服器 實現真正的連線版本 當初也有開發 但因為工作原因暫置後就忘了 有空再來繼續完成 :)
 
 ## Build Setup
 
@@ -26,15 +37,3 @@ npm run e2e
 # run all tests
 npm test
 ```
-
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
-
-"scripts": {
-    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
-    "start": "npm run dev",
-    "unit": "jest --config test/unit/jest.conf.js --coverage",
-    "e2e": "node test/e2e/runner.js",
-    "test": "npm run unit && npm run e2e",
-    "lint": "eslint --ext .js,.vue src test/unit test/e2e/specs",
-    "build": "node build/build.js"
-  },
