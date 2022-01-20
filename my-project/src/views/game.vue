@@ -1,5 +1,5 @@
 <template>
-  <div class="game-bg">
+  <div class="game-bg" style="background-image: url('././static/image/whokills/background.jpg')">
     <div class="top">
       <span v-if="night">第{{nightCountSpan}}夜</span>
       <span v-else>第{{nightCountSpan}}日</span>
@@ -56,7 +56,7 @@
         <span v-if="step === 26">{{ killed[0] + 1 }}號是獵人，他要帶走{{ playerWhoshoted }}。</span>
       </div>
       <div class="identify" v-if="player.includes(loginName)">
-        <div class="card-front"></div>
+        <div class="card-front" style="background-image: url('././static/image/whokills/cardBack.jpg');"></div>
         <div class="card-back">
           <img v-if="identify.length > 0" :src="'/static/image/whokills/id' + identify[player.indexOf(loginName)] + '.jpg'"/>
         </div>
@@ -99,7 +99,7 @@
       </div>
 
       <div class="witch" v-if="step === 4 && identify[player.indexOf(loginName)] === 2">
-        <span class="red" v-if="!doSave">{{ killed[0] + 1 }}號 {{player[killed[0]]}} 被殺了</span>
+        <span class="red" v-if="!doSave">{{ killed[0] + 1 }}號 被殺了</span>
         <div class="witchCard">
           <img @click="save()" :class="{'displaynone': killed[0] !== player.indexOf(loginName) || !doSave, 'displayunset': nightCount === 0}" src="/static/image/whokills/id9.jpg"/>
           <img v-if="!doPoison" @click="poisonFadein()" src="/static/image/whokills/id10.jpg"/>

@@ -114,9 +114,9 @@ div {
   .hall {
     display: none;
     position: relative;
-    height: -webkit-fill-available;
+    height: 100vh;
     padding: 20px;
-    background-image: url('../images/whokills/forest.gif');
+    /* background-image: url('./././static/image/whokills/forest.gif'); */
     filter:alpha(opacity=100);
     background-repeat: no-repeat;
     background-size: 100% 100%;
@@ -318,9 +318,9 @@ div {
   }
   .game-bg {
     display: none;
-    height: -webkit-fill-available;
+    height: 100vh;
     width: 100%;
-    background-image: url('../images/background.jpg');
+    /* background-image: url('../../../static/image/whokills/background.jpg'); */
     background-repeat: no-repeat;
     /* background-size: cover; */
     background-size: 100% 100%;
@@ -369,7 +369,7 @@ div {
   }
   .top .identify .card-front {
     position:absolute;
-    background-image: url('/static/image/whokills/cardBack.jpg');
+    /* background-image: url('../../../static/image/whokills/cardBack.jpg'); */
     background-size: 100% 100%;
     width: 100%;
     height: 100%;

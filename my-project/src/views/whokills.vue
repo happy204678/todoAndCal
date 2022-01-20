@@ -1,5 +1,5 @@
 <template>
-  <div class="hall">
+  <div class="hall" style="background-image: url('././static/image/whokills/forest.gif');">
     <div class="readymember floatl">
       <h1>狼人殺</h1>
       <div>
@@ -25,7 +25,7 @@
           <li>7.目前勝利條件會在遺言之後判定，請見諒。</li>
         </ul>
       </div>
-      <p>****想要提升遊戲體驗請斗內！****</p>
+      <!-- <p>****想要提升遊戲體驗請斗內！****</p> -->
       <button @click="startGame" :disabled="disabled">開始遊戲</button> <!-- v-if="player.indexOf(loginName) === 0" -->
     </div>
     <div class="member floatr">
@@ -61,15 +61,15 @@
         </ul>
       </div>
       <div class="card">
-        <img v-if="pos === 0" src="/static/image/whokills/id1.jpg"/>
-        <img v-if="pos === 1" src="/static/image/whokills/id6.jpg"/>
-        <img src="/static/image/whokills/id3.jpg"/>
-        <img src="/static/image/whokills/id2.jpg"/>
-        <img src="/static/image/whokills/id4.jpg"/>
-        <img src="/static/image/whokills/id5.jpg"/>
-        <img v-if="pos === 0" src="/static/image/whokills/id5.jpg"/>
-        <img v-if="pos === 1" src="/static/image/whokills/id7.jpg"/>
-        <img src="/static/image/whokills/id5.jpg"/>
+        <img v-if="pos === 0" src="../../static/image/whokills/id1.jpg"/>
+        <img v-if="pos === 1" src="../../static/image/whokills/id6.jpg"/>
+        <img src="../../static/image/whokills/id3.jpg"/>
+        <img src="../../static/image/whokills/id2.jpg"/>
+        <img src="../../static/image/whokills/id4.jpg"/>
+        <img src="../../static/image/whokills/id5.jpg"/>
+        <img v-if="pos === 0" src="../../static/image/whokills/id5.jpg"/>
+        <img v-if="pos === 1" src="../../static/image/whokills/id7.jpg"/>
+        <img src="../../static/image/whokills/id5.jpg"/>
       </div>
     </div>
   </div>
@@ -111,7 +111,7 @@ export default {
       if (val) {
         window.setTimeout(function () {
           // $('.hall').fadeOut(2000, function () {
-            vm.$router.push({ path: '/game/' + vm.loginName })
+          vm.$router.push({ path: '/game/' + vm.loginName })
           // })
         }, 500)
       }
